@@ -1,6 +1,7 @@
 package com.acc.regresiontest.com.dao;
 
 import com.acc.regresiontest.com.Exception.MongoDBException;
+import com.acc.regresiontest.com.domains.Datos;
 import com.acc.regresiontest.com.domains.User;
 import com.acc.regresiontest.com.interfaces.IMongoDao;
 import com.acc.regresiontest.com.utils.ConnectionMongoDB;
@@ -43,6 +44,31 @@ public class MongoDao implements IMongoDao{
 		return null;
 	}
 	
+	
+	@Override
+	public void addDato(Datos datos) {
+		
+		
+		//Recuperamos la base de datos.
+		 DB database = mongo.getDB("login");
+		 
+		 DBCollection coleccion = database.getCollection("CASOSDEPRUEBA");
+		 
+		 // creamos el elemento Con un BasicDBObject
+		 
+		 BasicDBObject doc = new BasicDBObject();
+		 
+		 doc.put("idPeticion", datos.getIdPeticion());
+		 doc.put("instrumento",datos.getInstrumento());
+		 doc.put("accion",datos.getAccion());
+		 doc.put("origen",datos.getOrigen());
+		 doc.put("destino",datos.getDestino());
+		 doc.put("mensaje",datos.getMensaje());
+		 doc.put("mensajeNeutro", datos.getMensajeNeutro());		 
+		 
+		 coleccion.insert(doc);
+		
+	}
 	
 
 }
