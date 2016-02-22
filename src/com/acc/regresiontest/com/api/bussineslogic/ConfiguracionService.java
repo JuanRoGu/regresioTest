@@ -14,7 +14,7 @@ import com.acc.regresiontest.com.domains.Datos;
 
 
 
-@Path("configuracion")
+@Path("configuration")
 public class ConfiguracionService {
 	
 	 
@@ -22,6 +22,8 @@ public class ConfiguracionService {
 	 public ConfiguracionService(@Context ServletContext context) {
 		 
 	 }
+	 
+	  
 	 
 	 @POST    
 	    public Response newAlta(@Context ServletContext context, @FormParam("requestId") String requestId){

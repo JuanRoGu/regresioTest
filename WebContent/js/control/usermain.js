@@ -12,7 +12,22 @@ $(document).ready(function(){
 	
 	  var regresionTest = angular.module("regresionTest",["ng-currency"]);
 	  
-	  regresionTest.controller("regresionController", function ($scope){
+	  regresionTest.controller("regresionController", function ($scope, $http){
+		  
+		  $scope.idRequest = {};
+		  
+		  $scope.configurationAdd = function(){
+		        $http.post('/api/configuration', $scope.formData)
+		            .success(function(data) {
+		                $scope.idRequest = {};
+		                $scope.id = data;
+		                console.log(data);
+		            })
+		            .error(function(data) {
+		                console.log('Error:' + data);
+		            });
+		    };
+
 		  
 		  this.listadoresultado = ["","Resultado 1","Resultado 2","Resultado 3","Resultado 4"]; 
 		  this.listadocasosprueba = ["","Caso Prueba 1","Caso Prueba 2","Caso Prueba 3","Caso Prueba 4"];

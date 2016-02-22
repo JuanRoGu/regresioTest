@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.acc.regresiontest.com.Exception.DAOException;
 import com.acc.regresiontest.com.domains.Datos;
-import com.acc.regresiontest.com.domains.User;
 import com.acc.regresiontest.com.interfaces.IOracleDao;
 import com.acc.regresiontest.com.utils.ConnectionBD;
 
@@ -30,7 +29,8 @@ public class OracleDao implements IOracleDao {
 									+ "FROM operaciones");
 			
 			
-			this.findByIdStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje, mensajeneutro Where idrequest = ?");
+			this.findByIdStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje, mensajeneutro "
+									+ "FROM operaciones WHERE idrequest = ?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -66,7 +66,7 @@ public class OracleDao implements IOracleDao {
 	@Override
 	public Datos findByid(String id) {
 		
-		PreparedStatement ps = null;
+
 		ResultSet resultSet = null;
 		
 		Datos datos = new Datos();
