@@ -1,0 +1,37 @@
+<h3>Filtrado de peticiones</h3>
+<div>
+<form name = "filtradoForm">
+		<table class= "tabla">
+		<tr>
+			<td>
+				<label for="idPeticion">IdPeticion: </label>
+        		<input type="text" ng-model="regresion.peticion.idPeticion" id="lastName" required/>
+       		 </td>
+       		 <td>
+       		 	<label for="origen"> Origen: </label>
+        		<select id="origen" required><option ng-repeat="o in regresion.origen" >{{o}}</option></select>
+       		 </td>
+       		 <td>
+       		 	<label>Fecha peticion desde: </label>
+       			<input calendar name = "date" id="fechasDesde"  ng-model="regresion.peticion.fechaDesde" required/>
+       		 </td>
+       	</tr>
+       	
+       	<td>
+				<label for="instrumento">Instrumento: </label>
+        		<select id="instrumento" required><option ng-repeat="i in regresion.instrumento" >{{i}}</option></select>
+       		 </td>
+       		 <td>
+       		 	<label for="origen"> Destino: </label>
+        		<select id="origen" required><option ng-repeat="d in regresion.destino" >{{d}}</option></select>
+       		 </td>
+       		 <td>
+       		 	<label>Fecha peticion hasta: </label>
+       			<input calendar name = "date" id="fechasHasta"  ng-model="regresion.peticion.fechaHasta" required/>
+       		 </td>
+       		 
+       		 <tr><td><button type="submit" class="btn btn-primary" ng-click="showMenufiltrado=1">Filtrar</button><span> </span><span> </span><span> </span><button type="reset" ng-click="showMenufiltrado=0; showMenuConfiguration = 0" class="btn btn-danger">Reset</button></td></tr>
+		
+		</table>
+	</form>
+</div>
