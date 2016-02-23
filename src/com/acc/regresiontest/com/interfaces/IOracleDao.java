@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.acc.regresiontest.com.domains.Datos;
 
-public interface IDatosDao {
+public interface IOracleDao {
 	
 	public List<Datos> listAll();
+	
+	public Datos findByid(String id);
 
 }

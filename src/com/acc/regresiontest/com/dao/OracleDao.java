@@ -7,20 +7,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.acc.regresiontest.com.Exception.DAOException;
 import com.acc.regresiontest.com.domains.Datos;
-import com.acc.regresiontest.com.interfaces.IDatosDao;
+import com.acc.regresiontest.com.interfaces.IOracleDao;
 import com.acc.regresiontest.com.utils.ConnectionBD;
 
-public class OracleDao implements IDatosDao {
+
+
+
+public class OracleDao implements IOracleDao {
 
 
 	private PreparedStatement findAllStatement;
+	private PreparedStatement findByIdStatement;
 	private Connection conn;
 
 	public OracleDao() {
 		try {
 			conn = ConnectionBD.getInstance();
-			this.findAllStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje  " + "FROM operaciones");
+			this.findAllStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje  "
+									+ "FROM operaciones");
+			
+			
+			this.findByIdStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje, mensajeneutro "
+									+ "FROM operaciones WHERE idrequest = ?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -52,5 +62,41 @@ public class OracleDao implements IDatosDao {
 		}
 		return null;
 	}
+
+	@Override
+	public Datos findByid(String id) {
+		
+
+		ResultSet resultSet = null;
+		
+		Datos datos = new Datos();
+		
+		try {
+			// Preparamos el preparedStatement con la query de inserción
+			
+			this.findByIdStatement.setString(1, id);
+			resultSet = this.findAllStatement.executeQuery();
+			
+			if(resultSet.next()){
+				datos.setIdPeticion(resultSet.getString("idpeticion"));
+				datos.setInstrumento(resultSet.getString("instrumento"));
+				datos.setAccion(resultSet.getString("accion"));
+				datos.setOrigen(resultSet.getString("origen"));
+				datos.setDestino(resultSet.getString("destino"));
+				datos.setMensaje(resultSet.getString("mensaje"));
+				datos.setMensajeNeutro(resultSet.getString("mensajeneutro"));
+				
+				return datos;
+			}
+		} catch (SQLException e) {
+
+			throw new DAOException(e.getMessage());
+			
+		}
+		return null;
+		
+	}
+	
+	
 
 }

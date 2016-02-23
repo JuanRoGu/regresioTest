@@ -12,13 +12,21 @@ $(document).ready(function(){
 	
 	  var regresionTest = angular.module("regresionTest",["ng-currency"]);
 	  
-	  regresionTest.controller("regresionController", function ($scope){
+	  regresionTest.controller("regresionController", function ($scope, $http){
+		  
+		  var config={
+				    method:"GET",
+				    url:"RegresionTest/api/configuration"
+		  }
+
+		  
+		  
 		  
 		  this.listadoresultado = ["","Resultado 1","Resultado 2","Resultado 3","Resultado 4"]; 
 		  this.listadocasosprueba = ["","Caso Prueba 1","Caso Prueba 2","Caso Prueba 3","Caso Prueba 4"];
-		  this.origen =["murex", "nai"];
-		  this.destino = ["adaptiv","deri"];
-		  this.instrumento =["swapDeals","spot"]
+		  this.origen =[];
+		  this.destino = [];
+		  this.instrumento =[];
 		  this.todayDate = createTodayDate();
 		  this.peticion = new peticionObj();
 	  });
