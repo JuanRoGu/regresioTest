@@ -25,11 +25,10 @@ $(document).ready(function(){
 		  this.peticion = new peticionObj();
 		  
 		  
-		  
 		  function RemoteResource($http, $q, baseUrl) {
 			    
 			  
-			  this.get = function() {
+			  this.list = function() {
 			        var defered = $q.defer();
 			        var promise = defered.promise;
 
@@ -38,6 +37,7 @@ $(document).ready(function(){
 			            url: baseUrl + '/api/configuration/' + idSeguro
 			        }).success(function(data, status, headers, config) {
 			            defered.resolve(data);
+			            
 			        }).error(function(data, status, headers, config) {
 			            if (status === 400) {
 			                defered.reject(data);

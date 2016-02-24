@@ -1,11 +1,13 @@
 package com.acc.regresiontest.com.api.bussineslogic;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
@@ -13,7 +15,7 @@ import com.acc.regresiontest.com.Exception.DAOException;
 import com.acc.regresiontest.com.dao.MongoDao;
 import com.acc.regresiontest.com.dao.OracleDao;
 import com.acc.regresiontest.com.domains.Datos;
-import com.acc.regresiontest.com.domains.Instrumento;
+
 
 @Path("configuration")
 public class ConfiguracionService {
@@ -23,25 +25,14 @@ public class ConfiguracionService {
 	}
 
 	@GET
-	    public Response ListSelect(){
+	    public Response List(){
 	        
-//		 MongoDao md = new MongoDao();
-//		 Instrumento instrumento = new Instrumento();
-//		 try{
-//		 instrumento.setDestinos(md.selectInstrumentos("destino"));
-//	        
-//	            
-//		 }catch(DAOException e){
-//			 
-//			 return Response
-//	                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-//	                    .entity(instrumento)
-//	                    .build();
-//		 }
-//		 
+		OracleDao od = new OracleDao();
+		List<Datos> datos = od.listAll();
+		
 		 return Response
 	                .status(Response.Status.OK)
-	                .entity("")
+	                .entity(datos)
 	                .build();
 	 }
 
