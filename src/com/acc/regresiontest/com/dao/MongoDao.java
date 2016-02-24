@@ -4,15 +4,18 @@ import java.util.List;
 
 import com.acc.regresiontest.com.Exception.MongoDBException;
 import com.acc.regresiontest.com.domains.Datos;
+import com.acc.regresiontest.com.domains.CasosDePrueba;
 import com.acc.regresiontest.com.domains.Instrumento;
 import com.acc.regresiontest.com.domains.User;
 import com.acc.regresiontest.com.interfaces.IMongoDao;
 import com.acc.regresiontest.com.utils.ConnectionMongoDB;
+import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.util.JSON;
 
 public class MongoDao implements IMongoDao{
 	MongoClient mongo;
@@ -28,27 +31,44 @@ public class MongoDao implements IMongoDao{
 	public User findUser(String user) {
 		User usuario = new User();
 		//Recuperamos la base de datos.
-		 DB database = mongo.getDB("login");
+		 DB database = mongo.getDB("REGRESIONTEST");
 		 
 		 //Recuperamos los valores de la colección, previamente hemos introducido 
 		 //unos valores desde la consola de mongo con db.things.save({name:"mongoDB"})
-		 DBCollection coleccion = database.getCollection("user");
+		 DBCollection coleccion = database.getCollection("USER");
 		 
 		//Recuperamos el elemento
-		 DBObject query = new BasicDBObject("user", user);
+		 DBObject query = new BasicDBObject("User", user);
 		 DBObject documento = coleccion.findOne(query);
 		 if(documento != null){
-		 usuario.setUser(documento.get("user").toString());
-		 usuario.setPass(documento.get("pass").toString());
-		 usuario.setPerfil(documento.get("profile").toString());
+		 usuario.setUser(documento.get("User").toString());
+		 usuario.setPass(documento.get("Password").toString());
+		 usuario.setPerfil(documento.get("Profile").toString());
 		 return usuario;
 		 }
 		 
 		return null;
 	}
 	
-	
-	
+	//Metodo para insetar en la base de datos mongo un caso de prueba
+	@Override
+	public void addDatoMongo(CasosDePrueba datos) {
+		
+		System.out.println("Llego al insert de la base de datos");
+		 System.out.println(datos.toString());
+		
+		//Recuperamos la base de datos.
+		 DB database = mongo.getDB("REGRESIONTEST");
+		 DBCollection coleccion = database.getCollection("CASOSDEPRUEBA");
+		 
+		 //Convierto la clase en json para facilitar el insert
+		 Gson gson = new Gson();
+		 String datos1 = gson.toJson(datos);
+		 //Inserto en la base de datos de mongo el json		 
+		 DBObject dbObject = (DBObject)JSON.parse(datos1);
+		 coleccion.insert(dbObject);
+		
+	}
 	
 	@Override
 	public void addDato(Datos datos) {
@@ -74,25 +94,22 @@ public class MongoDao implements IMongoDao{
 		 coleccion.insert(doc);
 		
 	}
+	//El metodo para seleccionar Origen/Destino/Instrumentos para el combo box
 	@Override
-	public List<String> selectInstrumentos(String sentencia) {
-		List<String> lista;
+	public List<String> selectCombo(String sentencia) {
 		System.out.println("Entro en el metodo");
-		User usuario = new User();
 		//Recuperamos la base de datos.
-		 DB database = mongo.getDB("login");
+		 DB database = mongo.getDB("REGRESIONTEST");
 		 
-		 //Recuperamos los valores de la colección, previamente hemos introducido 
-		 //unos valores desde la consola de mongo con db.things.save({name:"mongoDB"})
+		 //Recuperamos los datos para los combo box
 		 DBCollection coleccion = database.getCollection("FILTERS");
-		 List cl1 = coleccion.distinct(sentencia);
-		 
-		 for(int x=0;x<cl1.size();x++){
-			 System.out.println(cl1.get(x));
-		 }
+		 @SuppressWarnings("unchecked")
+		List<String> cl1 = coleccion.distinct(sentencia);
 
-		return null;
+		return cl1;
 	}
+	
+	
 	
 
 }
