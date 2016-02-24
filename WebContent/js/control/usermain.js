@@ -8,10 +8,7 @@ $(document).ready(function(){
 
 //Angular Code
 
-(function() {  
-
-	  
-		  
+(function() {   
 		  
 		  var regresionTest = angular.module("regresionTest",["ng-currency"]);
 		  regresionTest.controller("regresionController", function ($scope, $http){
@@ -25,50 +22,25 @@ $(document).ready(function(){
 		  this.peticion = new peticionObj();
 		  
 		  
-		  function RemoteResource($http, $q, baseUrl) {
-			    
-			  
-			  this.list = function() {
-			        var defered = $q.defer();
-			        var promise = defered.promise;
+		 this.initCombo = function(){
+			 
+			 $.ajax({
+		            url: 'http://localhost:8081/RegresionTest/api/configuration',
+		            type: 'GET',
+		            async: false,
+		            data: 'action=getFriends&JSONData='+JSON.stringify(this.loggedUser),
+		            dataType: "json",
+		            success: function (response) {
+		                outPutdata = response;
+		            },
+		            error: function (xhr, ajaxOptions, thrownError) {
+		                alert(xhr.status+"\n"+thrownError);
+		            }
+		        });
 
-			        $http({
-			            method: 'GET',
-			            url: baseUrl + '/api/configuration/' + idSeguro
-			        }).success(function(data, status, headers, config) {
-			            defered.resolve(data);
-			            
-			        }).error(function(data, status, headers, config) {
-			            if (status === 400) {
-			                defered.reject(data);
-			            } else {
-			                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
-			            }
-			        });
-
-			        return promise;
-
-			    };
-
-			}
-		  
-		  function RemoteResourceProvider() {
-			    var _baseUrl;
-			    this.setBaseUrl = function(baseUrl) {
-			        _baseUrl = baseUrl;
-			    };
-			    this.$get = ['$http', '$q', function($http, $q) {
-			            return new RemoteResource($http, $q, _baseUrl);
-			        }];
-			};
-		  
-
-		  
-		  
-		  
-		  
-	  });
-
+		        if (outPutdata[0]) {
+			 }
+		 
 	  
       this.fechasValidas = function() {
           var bool = true;

@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 //Angular code
 (function() {
-	var login = angular.module("login", []);
+	var login = angular.module("regresionTest", []);
 	login.controller("loginController", function($scope) {
 		// Propierties
 		this.log = new UserObj();
