@@ -8,19 +8,13 @@ $(document).ready(function(){
 
 //Angular Code
 
-(function() {
-	
-	  var regresionTest = angular.module("regresionTest",["ng-currency"]);
-	  
-	  regresionTest.controller("regresionController", function ($scope, $http){
-		  
-		  var config={
-				    method:"GET",
-				    url:"RegresionTest/api/configuration"
-		  }
+(function() {  
 
+	  
 		  
 		  
+		  var regresionTest = angular.module("regresionTest",["ng-currency"]);
+		  regresionTest.controller("regresionController", function ($scope, $http){
 		  
 		  this.listadoresultado = ["","Resultado 1","Resultado 2","Resultado 3","Resultado 4"]; 
 		  this.listadocasosprueba = ["","Caso Prueba 1","Caso Prueba 2","Caso Prueba 3","Caso Prueba 4"];
@@ -29,6 +23,50 @@ $(document).ready(function(){
 		  this.instrumento =[];
 		  this.todayDate = createTodayDate();
 		  this.peticion = new peticionObj();
+		  
+		  
+		  
+		  function RemoteResource($http, $q, baseUrl) {
+			    
+			  
+			  this.get = function() {
+			        var defered = $q.defer();
+			        var promise = defered.promise;
+
+			        $http({
+			            method: 'GET',
+			            url: baseUrl + '/api/configuration/' + idSeguro
+			        }).success(function(data, status, headers, config) {
+			            defered.resolve(data);
+			        }).error(function(data, status, headers, config) {
+			            if (status === 400) {
+			                defered.reject(data);
+			            } else {
+			                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+			            }
+			        });
+
+			        return promise;
+
+			    };
+
+			}
+		  
+		  function RemoteResourceProvider() {
+			    var _baseUrl;
+			    this.setBaseUrl = function(baseUrl) {
+			        _baseUrl = baseUrl;
+			    };
+			    this.$get = ['$http', '$q', function($http, $q) {
+			            return new RemoteResource($http, $q, _baseUrl);
+			        }];
+			};
+		  
+
+		  
+		  
+		  
+		  
 	  });
 
 	  

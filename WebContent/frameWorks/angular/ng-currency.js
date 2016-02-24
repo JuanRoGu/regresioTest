@@ -1,10 +1,14 @@
 /*
  * ng-currency
  * http://alaguirre.com/
-
- * Version: 0.7.10 - 2014-11-26
+ * Version: 0.8.12 - 2015-12-02
  * License: MIT
  */
+
+/*commonjs support*/
+if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports){
+      module.exports = 'ng-currency';
+}
 
 angular.module('ng-currency', [])
     .directive('ngCurrency', ['$filter', '$locale', function ($filter, $locale) {
@@ -14,22 +18,33 @@ angular.module('ng-currency', [])
                 min: '=min',
                 max: '=max',
                 currencySymbol: '@',
-                ngRequired: '=ngRequired'
+                ngRequired: '=ngRequired',
+                fraction: '=fraction'
             },
             link: function (scope, element, attrs, ngModel) {
+
+                if (attrs.ngCurrency === 'false') return;
+
+                scope.fraction = (typeof scope.fraction !== 'undefined')?scope.fraction:2;
 
                 function decimalRex(dChar) {
                     return RegExp("\\d|\\-|\\" + dChar, 'g');
                 }
 
                 function clearRex(dChar) {
-                    return RegExp("\\-{0,1}((\\" + dChar + ")|([0-9]{1,}\\" + dChar + "?))&?[0-9]{0,2}", 'g');
+                    return RegExp("\\-{0,1}((\\" + dChar + ")|([0-9]{1,}\\" + dChar + "?))&?[0-9]{0," + scope.fraction + "}", 'g');
                 }
 
                 function clearValue(value) {
                     value = String(value);
                     var dSeparator = $locale.NUMBER_FORMATS.DECIMAL_SEP;
                     var cleared = null;
+
+                    // Replace negative pattern to minus sign (-)
+                    var neg_dummy = $filter('currency')("-1", getCurrencySymbol(), scope.fraction);
+                    var neg_idx = neg_dummy.indexOf("1");
+                    var neg_str = neg_dummy.substring(0,neg_idx);
+                    value = value.replace(neg_str, "-");
 
                     if(RegExp("^-[\\s]*$", 'g').test(value)) {
                         value = "-0";
@@ -41,15 +56,11 @@ angular.module('ng-currency', [])
                             .join("").match(clearRex(dSeparator));
                         cleared = cleared ? cleared[0].replace(dSeparator, ".") : null;
                     }
-                    else
-                    {
-                        cleaned = null;
-                    }
 
                     return cleared;
                 }
 
-                function currencySymbol() {
+                function getCurrencySymbol() {
                     if (angular.isDefined(scope.currencySymbol)) {
                         return scope.currencySymbol;
                     } else {
@@ -57,38 +68,80 @@ angular.module('ng-currency', [])
                     }
                 }
 
+                function reformatViewValue(){
+                    var formatters = ngModel.$formatters,
+                        idx = formatters.length;
+
+                    var viewValue = ngModel.$$rawModelValue;
+                    while (idx--) {
+                      viewValue = formatters[idx](viewValue);
+                    }
+
+                    ngModel.$setViewValue(viewValue);
+                    ngModel.$render();
+                }
+
                 ngModel.$parsers.push(function (viewValue) {
-                    cVal = clearValue(viewValue);
+                    var cVal = clearValue(viewValue);
+                    //return parseFloat(cVal);
+                    // Check for fast digitation (-. or .)
+                    if(cVal == "." || cVal == "-.")
+                    {
+                        cVal = ".0";
+                    }
                     return parseFloat(cVal);
                 });
 
                 element.on("blur", function () {
-                    element.val($filter('currency')(ngModel.$modelValue, currencySymbol()));
+                    ngModel.$commitViewValue();
+                    reformatViewValue();
                 });
 
                 ngModel.$formatters.unshift(function (value) {
-                    return $filter('currency')(value, currencySymbol());
+                    return $filter('currency')(value, getCurrencySymbol(), scope.fraction);
                 });
 
-                scope.$watch(function () {
-                    return ngModel.$modelValue
-                }, function (newValue, oldValue) {
-                    runValidations(newValue);
-                })
-
-                function runValidations(cVal) {
+                ngModel.$validators.min = function(cVal) {
                     if (!scope.ngRequired && isNaN(cVal)) {
-                        return
+                        return true;
                     }
-                    if (scope.min) {
-                        var min = parseFloat(scope.min)
-                        ngModel.$setValidity('min', cVal >= min)
+                    if(typeof scope.min  !== 'undefined') {
+                        return cVal >= parseFloat(scope.min);
                     }
-                    if (scope.max) {
-                        var max = parseFloat(scope.max)
-                        ngModel.$setValidity('max', cVal <= max)
+                    return true;
+                };
+                
+                scope.$watch('min', function (val) {
+                    ngModel.$validate();
+                });
+
+                ngModel.$validators.max = function(cVal) {
+                    if (!scope.ngRequired && isNaN(cVal)) {
+                        return true;
                     }
-                }
+                    if(typeof scope.max  !== 'undefined') {
+                        return cVal <= parseFloat(scope.max);
+                    }
+                    return true;
+                };
+
+                scope.$watch('max', function (val) {
+                    ngModel.$validate();
+                });
+
+
+                ngModel.$validators.fraction = function(cVal) {
+                    if (!!cVal && isNaN(cVal)) {
+                        return false;
+                    }
+
+                    return true;
+                };
+
+                scope.$on('currencyRedraw', function() { 
+                    ngModel.$commitViewValue();
+                    reformatViewValue(); 
+                });
             }
         }
     }]);

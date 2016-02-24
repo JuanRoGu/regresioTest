@@ -29,7 +29,7 @@ public class OracleDao implements IOracleDao {
 									+ "FROM operaciones");
 			
 			
-			this.findByIdStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje, mensajeneutro "
+			this.findByIdStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje, mensajeneutro,mensajedestino,id "
 									+ "FROM operaciones WHERE idrequest = ?");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,6 +54,12 @@ public class OracleDao implements IOracleDao {
 				datos.setOrigen(resultSet.getString(4));
 				datos.setDestino(resultSet.getString(5));
 				datos.setMensaje(resultSet.getString(6));
+				datos.setMensajeNeutro(resultSet.getString(7));
+				if(resultSet.getString(8) != null){
+				datos.setMensajeDestino(resultSet.getString(8));
+				}
+				datos.setId(resultSet.getString(9));
+				
 				datosList.add(datos);
 			}
 			return datosList;

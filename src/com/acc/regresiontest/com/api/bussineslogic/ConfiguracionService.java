@@ -1,4 +1,5 @@
 package com.acc.regresiontest.com.api.bussineslogic;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -14,85 +15,63 @@ import com.acc.regresiontest.com.dao.OracleDao;
 import com.acc.regresiontest.com.domains.Datos;
 import com.acc.regresiontest.com.domains.Instrumento;
 
-
-
-
-
-
 @Path("configuration")
 public class ConfiguracionService {
-	
-	 
 
-	 public ConfiguracionService(@Context ServletContext context) {
-		 
-		 System.out.println("hola");
-		 
-	 }
-	 
-	 
-	 @GET
+	public ConfiguracionService(@Context ServletContext context) {
+
+	}
+
+	@GET
 	    public Response ListSelect(){
 	        
-		 MongoDao md = new MongoDao();
-		 Instrumento instrumento = new Instrumento();
-		 try{
-		 instrumento.setDestinos(md.selectInstrumentos("destino"));
-	        
-	            
-		 }catch(DAOException e){
-			 
-			 return Response
-	                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-	                    .entity(instrumento)
-	                    .build();
-		 }
-		 
+//		 MongoDao md = new MongoDao();
+//		 Instrumento instrumento = new Instrumento();
+//		 try{
+//		 instrumento.setDestinos(md.selectInstrumentos("destino"));
+//	        
+//	            
+//		 }catch(DAOException e){
+//			 
+//			 return Response
+//	                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+//	                    .entity(instrumento)
+//	                    .build();
+//		 }
+//		 
 		 return Response
-	                .status(Response.Status.CREATED)
-	                .entity(instrumento)
+	                .status(Response.Status.OK)
+	                .entity("")
 	                .build();
 	 }
-	  
-	 
-	 @POST    
-	    public Response newAlta(@Context ServletContext context, @FormParam("requestId") String requestId){
-		 
-		 ModelError modelError = new ModelError();
-		 Datos datos = null;
-		 
-		   //Check user input
-		 if(requestId == null || requestId.equals("")){
-	           modelError.addModelError("requestId", "atributo obligtorio");
-	        }
-		 
-		 if(modelError.hasErrors()){
-	            return Response
-	                    .status(Response.Status.BAD_REQUEST)
-	                    .entity(modelError)
-	                    .build();
-	        }
-		 
-		 
-		 try{
-			 MongoDao md = new MongoDao();
-			 OracleDao od = new OracleDao();
-			 datos = od.findByid(requestId);
-			 md.addDato(datos);
-		 }catch(DAOException e){
-			 
-			 return Response
-	                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-	                    .entity(modelError)
-	                    .build();
-		 }
-		 
-		 return Response
-	                .status(Response.Status.CREATED)
-	                .entity(datos)
-	                .build();
-		 
-	 }
-	
+
+	@POST
+	public Response newAlta(@Context ServletContext context, @FormParam("requestId") String requestId) {
+
+		ModelError modelError = new ModelError();
+		Datos datos = null;
+
+		// Check user input
+		if (requestId == null || requestId.equals("")) {
+			modelError.addModelError("requestId", "atributo obligtorio");
+		}
+
+		if (modelError.hasErrors()) {
+			return Response.status(Response.Status.BAD_REQUEST).entity(modelError).build();
+		}
+
+		try {
+			MongoDao md = new MongoDao();
+			OracleDao od = new OracleDao();
+			datos = od.findByid(requestId);
+			md.addDato(datos);
+		} catch (DAOException e) {
+
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(modelError).build();
+		}
+
+		return Response.status(Response.Status.CREATED).entity(datos).build();
+
+	}
 
 }
