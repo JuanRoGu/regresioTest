@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.acc.regresiontest.com.Exception.DAOException;
 import com.acc.regresiontest.com.domains.Datos;
+import com.acc.regresiontest.com.domains.Operaciones;
 import com.acc.regresiontest.com.interfaces.IOracleDao;
 import com.acc.regresiontest.com.utils.ConnectionBD;
 
@@ -103,6 +104,39 @@ public class OracleDao implements IOracleDao {
 		
 	}
 	
+	@Override
+    public Operaciones findID(String request_ID) {
+        System.out.println("Entro en el metodo de buscar de oracle");
+        ResultSet resultSet = null;
+        
+        Operaciones ope = new Operaciones();
+        
+        try {
+            // Preparamos el preparedStatement con la query de inserción
+            
+            this.findByIdStatement.setString(1, request_ID);
+            resultSet = this.findAllStatement.executeQuery();
+            
+            if(resultSet.next()){
+                ope.setRequest_ID(resultSet.getString("request_ID"));
+                ope.setID(resultSet.getString("ID"));
+                ope.setInstrumento(resultSet.getString("Instrumento"));
+                ope.setAccion(resultSet.getString("Accion"));
+                ope.setOrigen(resultSet.getString("Origen"));
+                ope.setDestino(resultSet.getString("Destino"));
+                ope.setMensaje(resultSet.getString("Mensaje"));
+                ope.setMensMN(resultSet.getString("MensMN"));
+                ope.setMensDestino(resultSet.getString("MensDestino"));
+                
+                return ope;
+            }
+        } catch (SQLException e) {
+
+            throw new DAOException(e.getMessage());
+            
+        }
+        return null;
+    }
 	
 
 }

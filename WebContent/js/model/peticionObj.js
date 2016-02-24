@@ -24,6 +24,16 @@ function peticionObj()
         this.setFechaHasta(fechaHasta);
 
     };
+    
+    this.construct = function (idPeticion, instrumento,accion,origen,destino)
+    {
+        this.setIdPeticion(idPeticion);
+        this.setInstrumento(instrumento);
+        this.setAccion(accion);
+        this.setOrigen(origen);
+        this.setDestino(destino);
+        this.setMensaje(mensaje);
+    };
     // getters && Setters
     
     

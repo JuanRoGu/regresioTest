@@ -31,6 +31,50 @@ public class ConfiguracionService {
 		 
 	 }
 	 
+	//Recupero los datos de un oracle mediante un ID
+     @POST
+     public Response findID(@Context ServletContext context, 
+                 @FormParam("request_ID") String request_ID){
+         
+         System.out.println("Entro en el buscador de oracle");
+         Operaciones operacion = null;
+         String datos1 = "";
+         Gson gson = new Gson();
+         
+         ModelError modelError = new ModelError();
+         if(request_ID == null || request_ID.equals("")){
+               modelError.addModelError("request_ID", "atributo obligtorio");
+            }
+         if(modelError.hasErrors()){
+                return Response
+                        .status(Response.Status.BAD_REQUEST)
+                        .entity(modelError)
+                        .build();
+            }
+         
+         try{
+             
+             //Realizo la conexion
+             OracleDao od = new OracleDao();
+             operacion = od.findID(request_ID);
+             datos1 = gson.toJson(operacion);
+             
+         }catch(DAOException e){
+             
+             return Response
+                        .status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity(modelError)
+                        .build();
+         }
+         
+         return Response
+                    .status(Response.Status.OK)
+                    .entity(datos1)
+                    .build();
+     }
+     
+     
+	 
 	 //Microservicios configuracion
 	 //Crea un caso de prueba
 	@POST
@@ -132,83 +176,7 @@ public class ConfiguracionService {
 		 
 	 }
 	 
-//	 //Recupera de la tabla FILTERS Origen
-//	 @GET
-//	    public Response ListSelectOrigen(){
-//	        System.out.println("Recoger Origen");
-//		 MongoDao md = new MongoDao();
-//		 Instrumento instrumento = new Instrumento();
-//		 List<String> origenes = new ArrayList<String>();
-//		 try{ 
-//		 instrumento.setOrigenes(md.selectCombo("Origen"));
-//		 origenes = instrumento.getOrigenes();
-//		 System.out.println(origenes);
-//		 
-//		 }catch(DAOException e){
-//			 
-//			 return Response
-//	                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-//	                    .entity(origenes)
-//	                    .build();
-//		 }
-//		 
-//		 return Response
-//	                .status(Response.Status.OK)
-//	                .entity(origenes)
-//	                .build();
-//	 }
-//	//Recupera de la tabla FILTERS Destino
-//		 @GET
-//		    public Response ListSelectDestino(){
-//			 System.out.println("Recoger Destino");
-//			 MongoDao md = new MongoDao();
-//			 Instrumento instrumento = new Instrumento();
-//			 List<String> destinos = new ArrayList<String>();
-//			 try{ 
-//			 instrumento.setDestinos(md.selectCombo("Destino"));
-//			 destinos = instrumento.getDestinos();
-//			 System.out.println(destinos);
-//			 
-//			 }catch(DAOException e){
-//				 
-//				 return Response
-//		                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-//		                    .entity(destinos)
-//		                    .build();
-//			 }
-//			 
-//			 return Response
-//		                .status(Response.Status.OK)
-//		                .entity(destinos)
-//		                .build();
-//		 }
-//		 
-//		//Recupera de la tabla FILTERS Instrumentos
-//		 @GET
-//		    public Response ListSelectInstrumentos(){
-//		        
-//			 MongoDao md = new MongoDao();
-//			 Instrumento instrumento = new Instrumento();
-//			 List<String> instrumentos = new ArrayList<String>();
-//			 try{ 
-//			 instrumento.setInstrumentos(md.selectCombo("Instrumento"));
-//			 instrumentos = instrumento.getInstrumentos();
-//			 System.out.println(instrumentos);
-//			 
-//			 }catch(DAOException e){
-//				 
-//				 return Response
-//		                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-//		                    .entity(instrumentos)
-//		                    .build();
-//			 }
-//			 
-//			 return Response
-//		                .status(Response.Status.OK)
-//		                .entity(instrumentos)
-//		                .build();
-//		 }
-		 
+	 
 		 @GET
          public Response ListSelectOrigenJson(){
              System.out.println("Recoger Origen");

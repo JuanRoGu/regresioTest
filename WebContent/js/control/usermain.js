@@ -1,292 +1,262 @@
-$(document).ready(function(){
+$(document).ready(function() {
 
-    $("[name=date]").datepicker({ dateFormat: 'dd/mm/yy' });
+	$("[name=date]").datepicker({
+		dateFormat : 'dd/mm/yy'
+	});
 
 });
 
+// Angular Code
 
+(function() {
 
-//Angular Code
+	var regresionTest = angular.module("regresionTest", [ "ng-currency" ]);
+	regresionTest.controller("regresionController", function($scope, $http) {
 
-(function() {  
-		  
-		  
-		  var regresionTest = angular.module("regresionTest",["ng-currency"]);
-		  regresionTest.controller("regresionController", function ($scope, $http){
-		  
-		  this.listadoresultado = ["","Resultado 1","Resultado 2","Resultado 3","Resultado 4"]; 
-		  this.listadocasosprueba = ["","Caso Prueba 1","Caso Prueba 2","Caso Prueba 3","Caso Prueba 4"];
-		  this.origen =[];
-		  this.destino = [];
-		  this.instrumento =[];
-		  this.todayDate = createTodayDate();
-		  this.peticion = new peticionObj();
-		  
-		  
+		this.listadoresultado = [];
+		this.listadocasosprueba = [];
+		this.origen = [];
+		this.destino = [];
+		this.instrumento = [];
+		this.idPeticion = "";
+		this.fechaDesde = ""
+		this.fechaHasta = "";
+		this.todayDate = createTodayDate();
+		this.peticion = new peticionObj();
 
-		  this.initCombo = function(){
-			  alert("entro en la funcion de la llamada que ya es algo")
-			  var outPutdata = [];
-				 
-				 $.ajax({
-			            url: 'http://localhost:8081/RegresionTest/api/configuration',
-			            type: 'GET',
-			            async: false,
-			            data:"",
-			            dataType: "json",
-			            success: function (response) {
-			                outPutdata = response;
-			            },
-			            error: function (xhr, ajaxOptions, thrownError) {
-			                alert(xhr.status+"\n"+thrownError);
-			            }
-			        });
+		this.initCombo = function() {
+			var outPutdata = [];
 
-			        if (outPutdata != null) {
-			        	  {
-			        		 // alert("con el stringify de JSON"+JSON.stringify(outPutdata));
-			        		 
-			        		 
-//			                  // we get all friends as an array of User objects
-			        		  
-			           
-			        			     
-			        			  var valores = JSON.stringify(outPutdata);   
-			        			  if( valores.length > 0 ) {   
-			        			    var atributos = '';   
-			        			    for(var aux in valores[0])   
-			        			      atributos += aux + ' ';   
-			        			     
-			        			    alert('Los atributos son: ' + atributos);   
-			        			  }   
-			        			  else   
-			        			    alert('No hay datos');   
+			$.ajax({
+				url : 'http://localhost:8081/RegresionTest/api/configuration',
+				type : 'GET',
+				async : false,
+				data : "",
+				dataType : "json",
+				success : function(response) {
+					outPutdata = response;
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					alert(xhr.status + "\n" + thrownError);
+				}
+			});
 
-			        		  
-			        		  
-			        		  
-			        		  
-			        		  
-			        		  
-			        		  
-			        		  
-			        		  
-			        		  
-			        		  
-			                  instrumento = outPutdata[0];
-			                  origen = outPutdata[1];
-			                  destino = outPutdata[2];
-			                  
-			                 
-							 };
-			                	  
-			        	  }
-			        	 
-			        
-			        else{
-			        	alert(JSON.stringify("error: "+outPutdata));
-			        }
-				 };
+			if (outPutdata != null) {
+				{
+					this.instrumento = outPutdata.instrumentos;
+					this.origen = outPutdata.origenes;
+					this.destino = outPutdata.destinos;
 
-		  
-		  
-		  
-		  
-	  });
+				};
+			}
+			else {
+				alert("Error en la llamada");
+			}
+		};
+		
+		this.filtrado = function() {
+			alert(this.requestID);
+			$.ajax({
+				url : 'http://localhost:8081/RegresionTest/api/configuration',
+				type : 'POST',
+				async : false,
+				data : this.requestID,
+				dataType : "json",
+				success : function(response) {
+					outPutdata = response;
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					alert(xhr.status + "\n" + thrownError);
+				}
+			});
+			
+		};
+		
+		
+	});
 
-	  
-      this.fechasValidas = function() {
-          var bool = true;
+	this.fechasValidas = function() {
+		var bool = true;
 
-          if( this.filtrado.fechaDesde > this.todayDate ) {
+		if (this.filtrado.fechaDesde > this.todayDate) {
 
-              $("#fechaDesde").removeClass("ng-valid");
-              $("#fechaDesde").addClass("ng-invalid");
-              bool=false;
-          }else {
+			$("#fechaDesde").removeClass("ng-valid");
+			$("#fechaDesde").addClass("ng-invalid");
+			bool = false;
+		} else {
 
-              $("#fechaDesde").removeClass("ng-invalid");
-              $("#fechaDesde").addClass("ng-valid");
+			$("#fechaDesde").removeClass("ng-invalid");
+			$("#fechaDesde").addClass("ng-valid");
 
-          }
-          if( this.reservation.fechaDesde >= this.reservation.fechaHasta ) {
+		}
+		if (this.reservation.fechaDesde >= this.reservation.fechaHasta) {
 
-              $("#fechaHasta").removeClass("ng-valid");
-              $("#fechaHasta").addClass("ng-invalid");
+			$("#fechaHasta").removeClass("ng-valid");
+			$("#fechaHasta").addClass("ng-invalid");
 
-              bool=false;
-          }else {
+			bool = false;
+		} else {
 
-              $("#fechaHasta").removeClass("ng-invalid");
-              $("#fechaHasta").addClass("ng-valid");
+			$("#fechaHasta").removeClass("ng-invalid");
+			$("#fechaHasta").addClass("ng-valid");
 
-          }
-          if(bool){
-              alert(this.reservation.toString());
-          }
+		}
 
-      };
-      
-      
-      
-	  regresionTest.directive("configuration", function () {
+	};
 
-	        return {
+	regresionTest.directive("configuration", function() {
 
-	            restrict: 'E',
-	            templateUrl:"templates/configuration.html",
+		return {
 
-	            controller:function(){
+			restrict : 'E',
+			templateUrl : "templates/configuration.html",
 
-	            },
+			controller : function() {
 
-	            controllerAs: 'configuration'
-	        };
-	    });
-	  
-	 
-	  
-	  regresionTest.directive('calendar', function () {
-	        return {
-	            require: 'ngModel',
-	            link: function (scope, el, attr, ngModel) {
-	                $(el).datepicker({
-	                    dateFormat: 'yy-mm-dd',
-	                    onSelect: function (dateText) {
-	                        scope.$apply(function () {
-	                            ngModel.$setViewValue(dateText);
-	                        });
-	                    }
-	                });
-	            }
-	        };
-	    });
-	  
-	  
-	  regresionTest.directive("result", function () {
+			},
 
-	        return {
+			controllerAs : 'configuration'
+		};
+	});
 
-	            restrict: 'E',
-	            templateUrl:"templates/result.html",
+	regresionTest.directive('calendar', function() {
+		return {
+			require : 'ngModel',
+			link : function(scope, el, attr, ngModel) {
+				$(el).datepicker({
+					dateFormat : 'yy-mm-dd',
+					onSelect : function(dateText) {
+						scope.$apply(function() {
+							ngModel.$setViewValue(dateText);
+						});
+					}
+				});
+			}
+		};
+	});
 
-	            controller:function(){
+	regresionTest.directive("result", function() {
 
-	            },
+		return {
 
-	            controllerAs: 'result'
-	        };
-	    });
-	  
-	  
-	  regresionTest.directive("cabecera", function () {
+			restrict : 'E',
+			templateUrl : "templates/result.html",
 
-	        return {
+			controller : function() {
 
-	            restrict: 'E',
-	            templateUrl:"templates/cabecera.html",
+			},
 
-	            controller:function(){
+			controllerAs : 'result'
+		};
+	});
 
-	            },
+	regresionTest.directive("cabecera", function() {
 
-	            controllerAs: 'cabecera'
-	        };
-	    });
-	  
-	  regresionTest.directive("filtrado", function () {
+		return {
 
-	        return {
+			restrict : 'E',
+			templateUrl : "templates/cabecera.html",
 
-	            restrict: 'E',
-	            templateUrl:"templates/filtrado.html",
+			controller : function() {
 
-	            controller:function(){
+			},
 
-	            },
+			controllerAs : 'cabecera'
+		};
+	});
 
-	            controllerAs: 'filtrado'
-	        };
-	    });
-	  
-	  regresionTest.directive("execution", function () {
+	regresionTest.directive("filtrado", function() {
 
-	        return {
+		return {
 
-	            restrict: 'E',
-	            templateUrl:"templates/execution.html",
+			restrict : 'E',
+			templateUrl : "templates/filtrado.html",
 
-	            controller:function(){
+			controller : function() {
 
-	            },
+			},
 
-	            controllerAs: 'execution'
-	        };
-	    });
-	  
-	  
-	  regresionTest.directive("visualizarjson", function () {
+			controllerAs : 'filtrado'
+		};
+	});
 
-	        return {
+	regresionTest.directive("execution", function() {
 
-	            restrict: 'E',
-	            templateUrl:"templates/visualizarjson.html",
+		return {
 
-	            controller:function(){
+			restrict : 'E',
+			templateUrl : "templates/execution.html",
 
-	            },
+			controller : function() {
 
-	            controllerAs: 'visualizarjson'
-	        };
-	    });
-	  
-	  regresionTest.directive("listadoresultados", function () {
+			},
 
-	        return {
+			controllerAs : 'execution'
+		};
+	});
 
-	            restrict: 'E',
-	            templateUrl:"templates/listadoresultados.html",
+	regresionTest.directive("visualizarjson", function() {
 
-	            controller:function(){
+		return {
 
-	            },
+			restrict : 'E',
+			templateUrl : "templates/visualizarjson.html",
 
-	            controllerAs: 'listadoresultados'
-	        };
-	    });
-	  
-	  regresionTest.directive("listadocasosprueba", function () {
+			controller : function() {
 
-	        return {
+			},
 
-	            restrict: 'E',
-	            templateUrl:"templates/listadocasosprueba.html",
+			controllerAs : 'visualizarjson'
+		};
+	});
 
-	            controller:function(){
+	regresionTest.directive("listadoresultados", function() {
 
-	            },
+		return {
 
-	            controllerAs: 'listadocasosprueba'
-	        };
-	    });
+			restrict : 'E',
+			templateUrl : "templates/listadoresultados.html",
+
+			controller : function() {
+
+			},
+
+			controllerAs : 'listadoresultados'
+		};
+	});
+
+	regresionTest.directive("listadocasosprueba", function() {
+
+		return {
+
+			restrict : 'E',
+			templateUrl : "templates/listadocasosprueba.html",
+
+			controller : function() {
+
+			},
+
+			controllerAs : 'listadocasosprueba'
+		};
+	});
 })();
 
 function createTodayDate() {
 
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth() + 1; // January is 0!
+	var yyyy = today.getFullYear();
 
-    if(dd<10) {
-        dd='0'+dd
-    }
+	if (dd < 10) {
+		dd = '0' + dd
+	}
 
-    if(mm<10) {
-        mm='0'+mm
-    }
-    today = yyyy+'-'+mm+'-'+dd;
+	if (mm < 10) {
+		mm = '0' + mm
+	}
+	today = yyyy + '-' + mm + '-' + dd;
 
-    return today;
+	return today;
 
 }
