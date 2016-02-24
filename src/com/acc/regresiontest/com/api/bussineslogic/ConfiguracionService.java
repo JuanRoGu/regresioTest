@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
@@ -20,8 +21,10 @@ import com.acc.regresiontest.com.domains.Datos;
 import com.acc.regresiontest.com.domains.CasosDePrueba;
 import com.acc.regresiontest.com.domains.Instrumento;
 import com.acc.regresiontest.com.domains.Operaciones;
+import com.google.gson.Gson;
 
 @Path("configuration")
+@Produces("json/application")
 public class ConfiguracionService {
 
 	 public ConfiguracionService(@Context ServletContext context) {
@@ -129,82 +132,115 @@ public class ConfiguracionService {
 		 
 	 }
 	 
-	 //Recupera de la tabla FILTERS Origen
-	 @GET
-	    public Response ListSelectOrigen(){
-	        System.out.println("Recoger Origen");
-		 MongoDao md = new MongoDao();
-		 Instrumento instrumento = new Instrumento();
-		 List<String> origenes = new ArrayList<String>();
-		 try{ 
-		 instrumento.setOrigenes(md.selectCombo("Origen"));
-		 origenes = instrumento.getOrigenes();
-		 System.out.println(origenes);
+//	 //Recupera de la tabla FILTERS Origen
+//	 @GET
+//	    public Response ListSelectOrigen(){
+//	        System.out.println("Recoger Origen");
+//		 MongoDao md = new MongoDao();
+//		 Instrumento instrumento = new Instrumento();
+//		 List<String> origenes = new ArrayList<String>();
+//		 try{ 
+//		 instrumento.setOrigenes(md.selectCombo("Origen"));
+//		 origenes = instrumento.getOrigenes();
+//		 System.out.println(origenes);
+//		 
+//		 }catch(DAOException e){
+//			 
+//			 return Response
+//	                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+//	                    .entity(origenes)
+//	                    .build();
+//		 }
+//		 
+//		 return Response
+//	                .status(Response.Status.OK)
+//	                .entity(origenes)
+//	                .build();
+//	 }
+//	//Recupera de la tabla FILTERS Destino
+//		 @GET
+//		    public Response ListSelectDestino(){
+//			 System.out.println("Recoger Destino");
+//			 MongoDao md = new MongoDao();
+//			 Instrumento instrumento = new Instrumento();
+//			 List<String> destinos = new ArrayList<String>();
+//			 try{ 
+//			 instrumento.setDestinos(md.selectCombo("Destino"));
+//			 destinos = instrumento.getDestinos();
+//			 System.out.println(destinos);
+//			 
+//			 }catch(DAOException e){
+//				 
+//				 return Response
+//		                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+//		                    .entity(destinos)
+//		                    .build();
+//			 }
+//			 
+//			 return Response
+//		                .status(Response.Status.OK)
+//		                .entity(destinos)
+//		                .build();
+//		 }
+//		 
+//		//Recupera de la tabla FILTERS Instrumentos
+//		 @GET
+//		    public Response ListSelectInstrumentos(){
+//		        
+//			 MongoDao md = new MongoDao();
+//			 Instrumento instrumento = new Instrumento();
+//			 List<String> instrumentos = new ArrayList<String>();
+//			 try{ 
+//			 instrumento.setInstrumentos(md.selectCombo("Instrumento"));
+//			 instrumentos = instrumento.getInstrumentos();
+//			 System.out.println(instrumentos);
+//			 
+//			 }catch(DAOException e){
+//				 
+//				 return Response
+//		                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+//		                    .entity(instrumentos)
+//		                    .build();
+//			 }
+//			 
+//			 return Response
+//		                .status(Response.Status.OK)
+//		                .entity(instrumentos)
+//		                .build();
+//		 }
 		 
-		 }catch(DAOException e){
-			 
-			 return Response
-	                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-	                    .entity(origenes)
-	                    .build();
-		 }
-		 
-		 return Response
-	                .status(Response.Status.OK)
-	                .entity(origenes)
-	                .build();
-	 }
-	//Recupera de la tabla FILTERS Destino
 		 @GET
-		    public Response ListSelectDestino(){
-			 System.out.println("Recoger Destino");
-			 MongoDao md = new MongoDao();
-			 Instrumento instrumento = new Instrumento();
-			 List<String> destinos = new ArrayList<String>();
-			 try{ 
-			 instrumento.setDestinos(md.selectCombo("Destino"));
-			 destinos = instrumento.getDestinos();
-			 System.out.println(destinos);
-			 
-			 }catch(DAOException e){
-				 
-				 return Response
-		                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-		                    .entity(destinos)
-		                    .build();
-			 }
-			 
-			 return Response
-		                .status(Response.Status.OK)
-		                .entity(destinos)
-		                .build();
-		 }
-		 
-		//Recupera de la tabla FILTERS Instrumentos
-		 @GET
-		    public Response ListSelectInstrumentos(){
-		        
-			 MongoDao md = new MongoDao();
-			 Instrumento instrumento = new Instrumento();
-			 List<String> instrumentos = new ArrayList<String>();
-			 try{ 
-			 instrumento.setInstrumentos(md.selectCombo("Instrumento"));
-			 instrumentos = instrumento.getInstrumentos();
-			 System.out.println(instrumentos);
-			 
-			 }catch(DAOException e){
-				 
-				 return Response
-		                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-		                    .entity(instrumentos)
-		                    .build();
-			 }
-			 
-			 return Response
-		                .status(Response.Status.OK)
-		                .entity(instrumentos)
-		                .build();
-		 }
+         public Response ListSelectOrigenJson(){
+             System.out.println("Recoger Origen");
+          MongoDao md = new MongoDao();
+          Instrumento instrumento = new Instrumento();
+          String datos1 = "";
+          Gson gson = new Gson();
+          try{ 
+          instrumento.setOrigenes(md.selectCombo("Origen"));
+          instrumento.setDestinos(md.selectCombo("Destino"));
+          instrumento.setInstrumentos(md.selectCombo("Instrumento"));
+          System.out.println(instrumento.getDestinos());
+          //Convierto la clase en json para facilitar el insert
+          
+          datos1 = gson.toJson(instrumento);
+          System.out.println(datos1);
+          
+          
+          }catch(DAOException e){
+              
+              return Response
+                         .status(Response.Status.INTERNAL_SERVER_ERROR)
+                         .entity(gson.toJson(instrumento))
+                         .build();
+          }
+          
+          return Response
+                     .status(Response.Status.OK)
+                     .entity(gson.toJson(instrumento))
+                     .build();
+      }
+
 
 	 @POST    
 	    public Response newAlta(@Context ServletContext context, @FormParam("requestId") String requestId){

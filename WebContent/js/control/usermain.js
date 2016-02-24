@@ -8,7 +8,8 @@ $(document).ready(function(){
 
 //Angular Code
 
-(function() {   
+(function() {  
+		  
 		  
 		  var regresionTest = angular.module("regresionTest",["ng-currency"]);
 		  regresionTest.controller("regresionController", function ($scope, $http){
@@ -22,25 +23,77 @@ $(document).ready(function(){
 		  this.peticion = new peticionObj();
 		  
 		  
-		 this.initCombo = function(){
-			 
-			 $.ajax({
-		            url: 'http://localhost:8081/RegresionTest/api/configuration',
-		            type: 'GET',
-		            async: false,
-		            data: 'action=getFriends&JSONData='+JSON.stringify(this.loggedUser),
-		            dataType: "json",
-		            success: function (response) {
-		                outPutdata = response;
-		            },
-		            error: function (xhr, ajaxOptions, thrownError) {
-		                alert(xhr.status+"\n"+thrownError);
-		            }
-		        });
 
-		        if (outPutdata[0]) {
-			 }
-		 
+		  this.initCombo = function(){
+			  alert("entro en la funcion de la llamada que ya es algo")
+			  var outPutdata = [];
+				 
+				 $.ajax({
+			            url: 'http://localhost:8081/RegresionTest/api/configuration',
+			            type: 'GET',
+			            async: false,
+			            data:"",
+			            dataType: "json",
+			            success: function (response) {
+			                outPutdata = response;
+			            },
+			            error: function (xhr, ajaxOptions, thrownError) {
+			                alert(xhr.status+"\n"+thrownError);
+			            }
+			        });
+
+			        if (outPutdata != null) {
+			        	  {
+			        		 // alert("con el stringify de JSON"+JSON.stringify(outPutdata));
+			        		 
+			        		 
+//			                  // we get all friends as an array of User objects
+			        		  
+			           
+			        			     
+			        			  var valores = JSON.stringify(outPutdata);   
+			        			  if( valores.length > 0 ) {   
+			        			    var atributos = '';   
+			        			    for(var aux in valores[0])   
+			        			      atributos += aux + ' ';   
+			        			     
+			        			    alert('Los atributos son: ' + atributos);   
+			        			  }   
+			        			  else   
+			        			    alert('No hay datos');   
+
+			        		  
+			        		  
+			        		  
+			        		  
+			        		  
+			        		  
+			        		  
+			        		  
+			        		  
+			        		  
+			        		  
+			                  instrumento = outPutdata[0];
+			                  origen = outPutdata[1];
+			                  destino = outPutdata[2];
+			                  
+			                 
+							 };
+			                	  
+			        	  }
+			        	 
+			        
+			        else{
+			        	alert(JSON.stringify("error: "+outPutdata));
+			        }
+				 };
+
+		  
+		  
+		  
+		  
+	  });
+
 	  
       this.fechasValidas = function() {
           var bool = true;
