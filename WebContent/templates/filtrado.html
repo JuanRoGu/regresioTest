@@ -4,7 +4,7 @@
       <form method="post">
         <table border="1">
 
-                <tr><th><input type="checkbox" /></th><th>idPeticion</th><th>instrumento</th><th>Accion</th><th>origen</th></tr>
+                <tr><th><input type="checkbox" /></th><th>idPeticion</th><th>Instrumento</th><th>Accion</th><th>origen</th></tr>
                 <tr ng-repeat =" filtrado in regresion.peticionFiltrado">
                 
                 <td><input type="checkbox" /></td><td>{{filtrado.idPeticion}}</td><td>{{filtrado.instrumento}}</td><td>{{filtrado.accion}}</td><td>{{filtrado.origen}}</td></tr>

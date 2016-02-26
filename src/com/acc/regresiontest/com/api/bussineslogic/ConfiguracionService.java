@@ -143,11 +143,11 @@ public class ConfiguracionService {
 			 instrumento.setOrigenes(md.selectCombo("Origen"));
 			 instrumento.setDestinos(md.selectCombo("Destino"));
 			 instrumento.setInstrumentos(md.selectCombo("Instrumento"));
-			 System.out.println(instrumento.getDestinos());
+			
 			 //Convierto la clase en json para facilitar el insert
 			 
 			 datos1 = gson.toJson(instrumento);
-			 System.out.println(datos1);
+			
 			 
 			 
 			 }catch(DAOException e){
@@ -169,7 +169,7 @@ public class ConfiguracionService {
 		 public Response findID(@Context ServletContext context, 
 				 	@FormParam("request_ID") String request_ID){
 			 
-			 System.out.println("Entro en el buscador de oracle");
+			 
 			 List<OperacionesOracle> operaciones = new ArrayList<>();
 			 String datos1 = "";
 			 Gson gson = new Gson();

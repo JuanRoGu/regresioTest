@@ -51,7 +51,7 @@ $(document).ready(function() {
 					this.logDB.user=outPutdata.user;
 					this.logDB.pass= outPutdata.pass;
 					this.logDB.profile = outPutdata.profile;
-					
+
 
 				};
 			}
@@ -62,7 +62,6 @@ $(document).ready(function() {
 	
 			//comprobaciones 
 			
-				alert(this.log.pass +" "+this.logDB.pass);
 				if (this.log.user == this.logDB.user && this.log.pass == this.logDB.pass){
 			//if (this.log.user == "tester" && this.log.pass =="tester") { // admin																// 1
 				login = true;

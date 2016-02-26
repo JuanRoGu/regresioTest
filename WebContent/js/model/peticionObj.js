@@ -14,18 +14,19 @@ function peticionObj()
     
     
   //Constructor
-    this.construct = function (idPeticion, instrumento,accion,origen,mensaje,mensajeNeutro)
+    this.construct = function (idPeticion, instrumento,origen,destino,fechaDesde,fechaHasta)
     {
         this.setIdPeticion(idPeticion);
         this.setInstrumento(instrumento);
-        this.setAccion(accion);
         this.setOrigen(origen);
-        this.setMensaje(mensaje);
-        this.setMensaje(mensajeNeutro);
+        this.setDestino(destino);
+        this.setFechaDesde(fechaDesde);
+        this.setFechaHasta(fechaHasta);
         this.seleccionado = false;
        
 
-    };
+    };  
+    
     
     this.construct = function (idPeticion, instrumento,accion,origen)
     {

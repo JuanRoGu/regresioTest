@@ -14,9 +14,12 @@ $(document).ready(function() {
 	regresionTest.controller("regresionController", function($scope, $http) {
 		
 		
-		// Variables
+		/************************************************ Variables**************************************************************/
 		
+		//filtrado
 		this.urlProfile = location.href.split("=")[1];
+		
+		
 		this.listadoresultado = [];
 		this.listadocasosprueba = [];
 		this.origen = [];
@@ -28,16 +31,25 @@ $(document).ready(function() {
 		this.todayDate = createTodayDate();
 		this.peticionFiltrado = [];
 		
+		//Lista peticiones
 		
-		
+		this.objAjaxPrueba = new peticionObj();
+		this.objAjaxPrueba.construct("444","emisiones","MLC","Deri","2016-02-01","2016-02-24");
 		
 		this.objprueba1 = new peticionObj();
 		this.objprueba1.construct("444","emisiones","MLC","Deri");
+		
 		this.objprueba2 = new peticionObj();
 		this.objprueba2.construct("232","BSB","murex","FusionDisk");
 		
+		
+		/******************************************FUNCIONES***************************************/
+		
+		
+		
 		this.logOut = function(){
 			window.open("index.html",target="_self");
+			
 		}
 
 		this.initCombo = function() {
@@ -70,13 +82,16 @@ $(document).ready(function() {
 			}
 		};
 		
+		
+//envia la peticion con los datos seleccionados y recoge los diferentes objetos y los muestra en la tabla
+		
 		this.filtrado = function() {
-//*************************** LLAMADA AJAX SIN PROBAR FALTA CONTROLLER			
+		
 //			$.ajax({
 //				url : 'http://localhost:8081/RegresionTest/api/configuration',
 //				type : 'POST',
 //				async : false,
-//				data : this.requestID,
+//				data : "{'idPeticion':'"+this.requestID+"','instrumento':'"+this.instrumento.getInstrumento()+"'}",
 //				dataType : "json",
 //				success : function(response) {
 //					outPutdata = response;
@@ -95,42 +110,43 @@ $(document).ready(function() {
 //
 //				};
 //			}
-			
+			alert("{'idPeticion':'"+this.requestID+"','instrumento':'"+this.objAjaxPrueba.getInstrumento()+"'}");
 			this.peticionFiltrado.push(this.objprueba1);
 			this.peticionFiltrado.push(this.objprueba2);
 		};
 		
+		this.fechasValidas = function() {
+			var bool = true;
+
+			if (this.filtrado.fechaDesde > this.todayDate) {
+
+				$("#fechaDesde").removeClass("ng-valid");
+				$("#fechaDesde").addClass("ng-invalid");
+				bool = false;
+			} else {
+
+				$("#fechaDesde").removeClass("ng-invalid");
+				$("#fechaDesde").addClass("ng-valid");
+
+			}
+			if (this.reservation.fechaDesde >= this.reservation.fechaHasta) {
+
+				$("#fechaHasta").removeClass("ng-valid");
+				$("#fechaHasta").addClass("ng-invalid");
+
+				bool = false;
+			} else {
+
+				$("#fechaHasta").removeClass("ng-invalid");
+				$("#fechaHasta").addClass("ng-valid");
+
+			}
+
+		};
 		
 	});
 
-	this.fechasValidas = function() {
-		var bool = true;
 
-		if (this.filtrado.fechaDesde > this.todayDate) {
-
-			$("#fechaDesde").removeClass("ng-valid");
-			$("#fechaDesde").addClass("ng-invalid");
-			bool = false;
-		} else {
-
-			$("#fechaDesde").removeClass("ng-invalid");
-			$("#fechaDesde").addClass("ng-valid");
-
-		}
-		if (this.reservation.fechaDesde >= this.reservation.fechaHasta) {
-
-			$("#fechaHasta").removeClass("ng-valid");
-			$("#fechaHasta").addClass("ng-invalid");
-
-			bool = false;
-		} else {
-
-			$("#fechaHasta").removeClass("ng-invalid");
-			$("#fechaHasta").addClass("ng-valid");
-
-		}
-
-	};
 	
 	//Directivas
 
