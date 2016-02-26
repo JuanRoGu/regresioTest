@@ -12,7 +12,11 @@ $(document).ready(function() {
 
 	var regresionTest = angular.module("regresionTest", [ "ng-currency" ]);
 	regresionTest.controller("regresionController", function($scope, $http) {
-
+		
+		
+		// Variables
+		
+		this.urlProfile = location.href.split("=")[1];
 		this.listadoresultado = [];
 		this.listadocasosprueba = [];
 		this.origen = [];
@@ -22,7 +26,19 @@ $(document).ready(function() {
 		this.fechaDesde = ""
 		this.fechaHasta = "";
 		this.todayDate = createTodayDate();
-		this.peticion = new peticionObj();
+		this.peticionFiltrado = [];
+		
+		
+		
+		
+		this.objprueba1 = new peticionObj();
+		this.objprueba1.construct("444","emisiones","MLC","Deri");
+		this.objprueba2 = new peticionObj();
+		this.objprueba2.construct("232","BSB","murex","FusionDisk");
+		
+		this.logOut = function(){
+			window.open("index.html",target="_self");
+		}
 
 		this.initCombo = function() {
 			var outPutdata = [];
@@ -55,21 +71,33 @@ $(document).ready(function() {
 		};
 		
 		this.filtrado = function() {
-			alert(this.requestID);
-			$.ajax({
-				url : 'http://localhost:8081/RegresionTest/api/configuration',
-				type : 'POST',
-				async : false,
-				data : this.requestID,
-				dataType : "json",
-				success : function(response) {
-					outPutdata = response;
-				},
-				error : function(xhr, ajaxOptions, thrownError) {
-					alert(xhr.status + "\n" + thrownError);
-				}
-			});
+//*************************** LLAMADA AJAX SIN PROBAR FALTA CONTROLLER			
+//			$.ajax({
+//				url : 'http://localhost:8081/RegresionTest/api/configuration',
+//				type : 'POST',
+//				async : false,
+//				data : this.requestID,
+//				dataType : "json",
+//				success : function(response) {
+//					outPutdata = response;
+//				},
+//				error : function(xhr, ajaxOptions, thrownError) {
+//					alert(xhr.status + "\n" + thrownError);
+//				}
+//			});
+//			
+//
+//			if (outPutdata != null) {
+//				{
+//					this.instrumento = outPutdata.instrumentos;
+//					this.origen = outPutdata.origenes;
+//					this.destino = outPutdata.destinos;
+//
+//				};
+//			}
 			
+			this.peticionFiltrado.push(this.objprueba1);
+			this.peticionFiltrado.push(this.objprueba2);
 		};
 		
 		
@@ -103,6 +131,8 @@ $(document).ready(function() {
 		}
 
 	};
+	
+	//Directivas
 
 	regresionTest.directive("configuration", function() {
 
@@ -241,6 +271,8 @@ $(document).ready(function() {
 	});
 })();
 
+
+// funciones no angular
 function createTodayDate() {
 
 	var today = new Date();

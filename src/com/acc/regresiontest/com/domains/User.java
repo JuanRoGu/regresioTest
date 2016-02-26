@@ -10,12 +10,12 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String user;
 	private String pass;
-	private String perfil;
+	private String profile;
 	public User(String user, String pass, String perfil) {
 		super();
 		this.user = user;
 		this.pass = pass;
-		this.perfil = perfil;
+		this.profile = perfil;
 	}
 	public User() {
 		super();
@@ -33,10 +33,10 @@ public class User implements Serializable {
 		this.pass = pass;
 	}
 	public String getPerfil() {
-		return perfil;
+		return profile;
 	}
 	public void setPerfil(String perfil) {
-		this.perfil = perfil;
+		this.profile = perfil;
 	}
 	@Override
 	public String toString() {
@@ -46,7 +46,7 @@ public class User implements Serializable {
 		builder.append(", pass=");
 		builder.append(pass);
 		builder.append(", perfil=");
-		builder.append(perfil);
+		builder.append(profile);
 		builder.append("]");
 		return builder.toString();
 	}

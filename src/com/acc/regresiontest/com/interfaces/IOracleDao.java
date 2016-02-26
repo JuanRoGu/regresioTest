@@ -3,7 +3,7 @@ package com.acc.regresiontest.com.interfaces;
 import java.util.List;
 
 import com.acc.regresiontest.com.domains.Datos;
-import com.acc.regresiontest.com.domains.Operaciones;
+import com.acc.regresiontest.com.domains.OperacionesOracle;
 
 public interface IOracleDao {
 	
@@ -11,6 +11,6 @@ public interface IOracleDao {
 	
 	public Datos findByid(String id);
 	
-	public Operaciones findID(String request_ID);
+	public List<OperacionesOracle> findID(String request_ID);
 
 }

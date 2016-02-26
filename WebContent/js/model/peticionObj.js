@@ -7,32 +7,33 @@ function peticionObj()
     this.origen;
     this.destino;
     this.mensaje;
+    this.mensajeNeutro;
     this.fechaDesde
     this.fechaHasta
+    this.seleccionado;
     
     
   //Constructor
-    this.construct = function (idPeticion, instrumento,accion,origen,destino,mensaje,fechaDesde,fechaHasta)
+    this.construct = function (idPeticion, instrumento,accion,origen,mensaje,mensajeNeutro)
     {
         this.setIdPeticion(idPeticion);
         this.setInstrumento(instrumento);
         this.setAccion(accion);
         this.setOrigen(origen);
-        this.setDestino(destino);
         this.setMensaje(mensaje);
-        this.setFechaDesde(fechaDesde);
-        this.setFechaHasta(fechaHasta);
+        this.setMensaje(mensajeNeutro);
+        this.seleccionado = false;
+       
 
     };
     
-    this.construct = function (idPeticion, instrumento,accion,origen,destino)
+    this.construct = function (idPeticion, instrumento,accion,origen)
     {
         this.setIdPeticion(idPeticion);
         this.setInstrumento(instrumento);
         this.setAccion(accion);
         this.setOrigen(origen);
-        this.setDestino(destino);
-        this.setMensaje(mensaje);
+        this.seleccionado = false;
     };
     // getters && Setters
     
@@ -45,6 +46,10 @@ function peticionObj()
     this.setMensaje = function (mensaje){this.mensaje = mensaje;};
     this.setFechaDesde = function (fechaDesde){this.fechaDesde = fechaDesde;};
     this.setFechaHasta = function (fechaHasta){this.fechaHasta = fechaHasta;};
+    this.setFechaHasta = function (fechaHasta){this.fechaHasta = fechaHasta;};
+    this.setMensaje = function (mensajeNeutro){this.mensajeNeutro = mensajeNeutro;};
+    this.setSeleccionado = function (seleccionado){this.seleccionado = seleccionado;};
+    
     
     this.getIdPeticion = function () {return this.idPeticion;};
     this.getInstrumento = function () {return this.instrumento;};
@@ -54,6 +59,9 @@ function peticionObj()
     this.getMensaje = function () {return this.mensaje;};
     this.getFechaDesde = function () {return this.fechaDesde;};
     this.getFechaHasta = function () {return this.fechaHasta;};
+    this.getMensaje = function () {return this.mensaje;};
+    this.getMensajeNeutro = function () {return this.mensajeNeutro;};
+    this.getSeleccionado = function () {return this.Seleccionado;};
     
     //Methods
     
@@ -62,9 +70,11 @@ function peticionObj()
     	
     	var peticionString = "";
 
-        peticionString += "IdPeticion: " + this.getPeticionId() + " Instrumento: " + this.getInstrumento + " Accion: " + this.getAccion() + " Origen: " + this.getOrigen() +
-        " Destino: " +this.getDestino() + " Mensaje: " + this.getMensaje() + "FechaDesde" + this.getFechaDesde() + " FechaHasta: " +this.getFechaHasta()+"\n";
-        return clientString;
+        peticionString += "IdPeticion: " + this.getIdPeticion() + " Instrumento: " + this.getInstrumento + " Accion: " + this.getAccion() + " Origen: " + this.getOrigen() +
+        " Mensaje: " + this.getMensaje() + "FechaDesde" + this.getFechaDesde() + " FechaHasta: " +this.getFechaHasta()+ "mensaje: "+this.getMensaje()+"mensajeNeutro: "+this.getMensajeNeutro()+"\n";
+        
+        
+        return peticionString;
     }
     
     

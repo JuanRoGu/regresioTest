@@ -10,73 +10,27 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.acc.regresiontest.com.Exception.DAOException;
 import com.acc.regresiontest.com.dao.MongoDao;
 import com.acc.regresiontest.com.dao.OracleDao;
-import com.acc.regresiontest.com.domains.Datos;
 import com.acc.regresiontest.com.domains.CasosDePrueba;
 import com.acc.regresiontest.com.domains.Instrumento;
-import com.acc.regresiontest.com.domains.Operaciones;
+import com.acc.regresiontest.com.domains.OperacionesMongo;
+import com.acc.regresiontest.com.domains.OperacionesOracle;
 import com.google.gson.Gson;
 
 @Path("configuration")
-@Produces("json/application")
 public class ConfiguracionService {
 
 	 public ConfiguracionService(@Context ServletContext context) {
 		 
 	 }
 	 
-	//Recupero los datos de un oracle mediante un ID
-     @POST
-     public Response findID(@Context ServletContext context, 
-                 @FormParam("request_ID") String request_ID){
-         
-         System.out.println("Entro en el buscador de oracle");
-         Operaciones operacion = null;
-         String datos1 = "";
-         Gson gson = new Gson();
-         
-         ModelError modelError = new ModelError();
-         if(request_ID == null || request_ID.equals("")){
-               modelError.addModelError("request_ID", "atributo obligtorio");
-            }
-         if(modelError.hasErrors()){
-                return Response
-                        .status(Response.Status.BAD_REQUEST)
-                        .entity(modelError)
-                        .build();
-            }
-         
-         try{
-             
-             //Realizo la conexion
-             OracleDao od = new OracleDao();
-             operacion = od.findID(request_ID);
-             datos1 = gson.toJson(operacion);
-             
-         }catch(DAOException e){
-             
-             return Response
-                        .status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(modelError)
-                        .build();
-         }
-         
-         return Response
-                    .status(Response.Status.OK)
-                    .entity(datos1)
-                    .build();
-     }
-     
-     
-	 
 	 //Microservicios configuracion
-	 //Crea un caso de prueba
+	 //Crea un caso de prueba en mongodb
 	@POST
 	 public Response altaCaso(@Context ServletContext context, 
 			 	@FormParam("nombreCaso") String nombreCaso,
@@ -115,7 +69,8 @@ public class ConfiguracionService {
 		//Si todo a funcionado
 		
 		 CasosDePrueba casos = new CasosDePrueba();
-		 Operaciones operaciones = new Operaciones();
+		 OperacionesMongo operaciones = new OperacionesMongo();
+		 List<OperacionesMongo> ope= new ArrayList<>();
 		 
 		//set de las operaciones
 		 operaciones.setRequest_ID(request_ID);
@@ -127,10 +82,10 @@ public class ConfiguracionService {
 		 operaciones.setMensaje(Mensaje);
 		 operaciones.setMensMN(MensMN);
 		 operaciones.setMensDestino(MensDestino);
-		 
+		 ope.add(operaciones);
 		 //set de casos de prueba
 		 casos.setNombreCaso(nombreCaso);
-		 casos.setOperaciones(operaciones);
+		 casos.setOperaciones(ope);
 
 		 if(modelError.hasErrors()){
 	            return Response
@@ -160,7 +115,7 @@ public class ConfiguracionService {
 	 } 
 	 
 	 
-	//Elimina un caso de prueba
+	//Elimina un caso de prueba en mongodb
 	 @DELETE
 	 @Path("{id}")
 	 public Response deleteCaso(@Context ServletContext context, @PathParam("id") int id){
@@ -168,7 +123,7 @@ public class ConfiguracionService {
 		 
 	 }
 	 
-	//Edita un caso de prueba
+	//Edita un caso de prueba en mongodb
 	 @PUT
 	 @Path("{id}")
 	 public Response editarCaso(@Context ServletContext context, @PathParam("id") int id){
@@ -176,78 +131,80 @@ public class ConfiguracionService {
 		 
 	 }
 	 
-	 
+	//Recupera de la tabla FILTERS Origen y envia por json
 		 @GET
-         public Response ListSelectOrigenJson(){
-             System.out.println("Recoger Origen");
-          MongoDao md = new MongoDao();
-          Instrumento instrumento = new Instrumento();
-          String datos1 = "";
-          Gson gson = new Gson();
-          try{ 
-          instrumento.setOrigenes(md.selectCombo("Origen"));
-          instrumento.setDestinos(md.selectCombo("Destino"));
-          instrumento.setInstrumentos(md.selectCombo("Instrumento"));
-          System.out.println(instrumento.getDestinos());
-          //Convierto la clase en json para facilitar el insert
-          
-          datos1 = gson.toJson(instrumento);
-          System.out.println(datos1);
-          
-          
-          }catch(DAOException e){
-              
-              return Response
-                         .status(Response.Status.INTERNAL_SERVER_ERROR)
-                         .entity(gson.toJson(instrumento))
-                         .build();
-          }
-          
-          return Response
-                     .status(Response.Status.OK)
-                     .entity(gson.toJson(instrumento))
-                     .build();
-      }
-
-
-	 @POST    
-	    public Response newAlta(@Context ServletContext context, @FormParam("requestId") String requestId){
-		 
-		 ModelError modelError = new ModelError();
-		 Datos datos = null;
-		 
-		   //Check user input
-		 if(requestId == null || requestId.equals("")){
-	           modelError.addModelError("requestId", "atributo obligtorio");
-	        }
-		 
-		 if(modelError.hasErrors()){
-	            return Response
-	                    .status(Response.Status.BAD_REQUEST)
-	                    .entity(modelError)
-	                    .build();
-	        }
-		 
-		 
-		 try{
+		    public Response ListSelectOrigenJson(){
+		        System.out.println("Recoger Origen");
 			 MongoDao md = new MongoDao();
-			 OracleDao od = new OracleDao();
-			 datos = od.findByid(requestId);
-			 md.addDato(datos);
-		 }catch(DAOException e){
+			 Instrumento instrumento = new Instrumento();
+			 String datos1 = "";
+			 Gson gson = new Gson();
+			 try{ 
+			 instrumento.setOrigenes(md.selectCombo("Origen"));
+			 instrumento.setDestinos(md.selectCombo("Destino"));
+			 instrumento.setInstrumentos(md.selectCombo("Instrumento"));
+			 System.out.println(instrumento.getDestinos());
+			 //Convierto la clase en json para facilitar el insert
+			 
+			 datos1 = gson.toJson(instrumento);
+			 System.out.println(datos1);
+			 
+			 
+			 }catch(DAOException e){
+				 
+				 return Response
+		                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+		                    .entity(datos1)
+		                    .build();
+			 }
 			 
 			 return Response
-	                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-	                    .entity(modelError)
-	                    .build();
+		                .status(Response.Status.OK)
+		                .entity(datos1)
+		                .build();
 		 }
 		 
-		 return Response
-	                .status(Response.Status.CREATED)
-	                .entity(datos)
-	                .build();
-		 
-	 }
+	//Recupero los datos de un oracle mediante un ID
+		 @POST
+		 public Response findID(@Context ServletContext context, 
+				 	@FormParam("request_ID") String request_ID){
+			 
+			 System.out.println("Entro en el buscador de oracle");
+			 List<OperacionesOracle> operaciones = new ArrayList<>();
+			 String datos1 = "";
+			 Gson gson = new Gson();
+			 
+			 ModelError modelError = new ModelError();
+			 if(request_ID == null || request_ID.equals("")){
+		           modelError.addModelError("request_ID", "atributo obligtorio");
+		        }
+			 if(modelError.hasErrors()){
+		            return Response
+		                    .status(Response.Status.BAD_REQUEST)
+		                    .entity(modelError)
+		                    .build();
+		        }
+			 
+			 try{
+				 
+				 //Realizo la conexion
+				 OracleDao od = new OracleDao();
+				 operaciones = od.findID(request_ID);
+				 datos1 = gson.toJson(operaciones);
+				 
+			 }catch(DAOException e){
+				 
+				 return Response
+		                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+		                    .entity(modelError)
+		                    .build();
+			 }
+			 
+			 return Response
+		                .status(Response.Status.OK)
+		                .entity(datos1)
+		                .build();
+		 }
 	
 
 }

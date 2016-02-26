@@ -2,6 +2,8 @@ package com.acc.regresiontest.com.domains;
 
 import java.io.Serializable;
 
+
+
 public class Datos implements Serializable {
 
 	/**

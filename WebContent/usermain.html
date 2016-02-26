@@ -39,9 +39,9 @@
      <nav class="navbar navbar-default" role="navigation">
         	<ul class="nav nav-tabs">
 				<li ng-class="{active:showMenuOption==1}"><a id="execution" ng-click="showMenuOption=1">Execution</a></li>
-				<li ng-class="{active:showMenuOption==2}"><a id="configuration" ng-click="showMenuOption=2">Configuration</a></li>
+				<li ng-class="{active:showMenuOption==2}" ng-show= "regresion.urlProfile=='Config'" ng-model = "regresion.urlProfile"><a id="configuration" ng-click="showMenuOption=2">Configuration</a></li>
 				<li ng-class="{active:showMenuOption==3}"><a id="result" ng-click="showMenuOption=3">Result</a></li>
-            	<li><a href="logout.do" target="_self">Logout</a></li>
+            	<li><a ng-click = regresion.logOut()>Logout</a></li>
         	</ul>
 	</nav>
 	 

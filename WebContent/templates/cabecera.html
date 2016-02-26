@@ -30,7 +30,7 @@
        			<input calendar name = "date" id="fechasHasta"  ng-model="regresion.fechaHasta" required/>
        		 </td>
        		 
-       		 <tr><td><button type="submit" class="btn btn-primary" ng-click="showMenufiltrado=1">Filtrar</button><span> </span><span> </span><span> </span><button type="reset" ng-click="showMenufiltrado=0; showMenuConfiguration = 0" class="btn btn-danger">Reset</button></td></tr>
+       		 <tr><td><button type="submit" class="btn btn-primary" ng-click="showMenufiltrado=1; regresion.filtrado()">Filtrar</button><span> </span><span> </span><span> </span><button type="reset" ng-click="showMenufiltrado=0; showMenuConfiguration = 0" class="btn btn-danger">Reset</button></td></tr>
 		
 		</table>
 	</form>

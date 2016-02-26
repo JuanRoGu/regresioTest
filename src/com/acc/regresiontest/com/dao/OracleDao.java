@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.acc.regresiontest.com.Exception.DAOException;
 import com.acc.regresiontest.com.domains.Datos;
-import com.acc.regresiontest.com.domains.Operaciones;
+import com.acc.regresiontest.com.domains.OperacionesOracle;
 import com.acc.regresiontest.com.interfaces.IOracleDao;
 import com.acc.regresiontest.com.utils.ConnectionBD;
 
@@ -21,17 +21,19 @@ public class OracleDao implements IOracleDao {
 
 	private PreparedStatement findAllStatement;
 	private PreparedStatement findByIdStatement;
+	
 	private Connection conn;
 
 	public OracleDao() {
 		try {
 			conn = ConnectionBD.getInstance();
+			
 			this.findAllStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje  "
 									+ "FROM operaciones");
 			
 			
-			this.findByIdStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje, mensajeneutro,mensajedestino,id "
-									+ "FROM operaciones WHERE idrequest = ?");
+			this.findByIdStatement = conn.prepareStatement("SELECT REQUEST_ID,INSTRUMENTO,ACCION,ORIGEN,MENSAJE,MENSMN "
+									+ "FROM operaciones WHERE request_ID = ?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -55,12 +57,6 @@ public class OracleDao implements IOracleDao {
 				datos.setOrigen(resultSet.getString(4));
 				datos.setDestino(resultSet.getString(5));
 				datos.setMensaje(resultSet.getString(6));
-				datos.setMensajeNeutro(resultSet.getString(7));
-				if(resultSet.getString(8) != null){
-				datos.setMensajeDestino(resultSet.getString(8));
-				}
-				datos.setId(resultSet.getString(9));
-				
 				datosList.add(datos);
 			}
 			return datosList;
@@ -103,40 +99,37 @@ public class OracleDao implements IOracleDao {
 		return null;
 		
 	}
-	
-	@Override
-    public Operaciones findID(String request_ID) {
-        System.out.println("Entro en el metodo de buscar de oracle");
-        ResultSet resultSet = null;
-        
-        Operaciones ope = new Operaciones();
-        
-        try {
-            // Preparamos el preparedStatement con la query de inserción
-            
-            this.findByIdStatement.setString(1, request_ID);
-            resultSet = this.findAllStatement.executeQuery();
-            
-            if(resultSet.next()){
-                ope.setRequest_ID(resultSet.getString("request_ID"));
-                ope.setID(resultSet.getString("ID"));
-                ope.setInstrumento(resultSet.getString("Instrumento"));
-                ope.setAccion(resultSet.getString("Accion"));
-                ope.setOrigen(resultSet.getString("Origen"));
-                ope.setDestino(resultSet.getString("Destino"));
-                ope.setMensaje(resultSet.getString("Mensaje"));
-                ope.setMensMN(resultSet.getString("MensMN"));
-                ope.setMensDestino(resultSet.getString("MensDestino"));
-                
-                return ope;
-            }
-        } catch (SQLException e) {
 
-            throw new DAOException(e.getMessage());
-            
-        }
-        return null;
-    }
+	@Override
+	public List<OperacionesOracle> findID(String request_ID) {
+		System.out.println("Entro en el metodo de buscar de oracle");
+		ResultSet resultSet = null;
+		
+		List<OperacionesOracle> operaciones = new ArrayList<>();
+		
+		try {
+			
+			this.findByIdStatement.setString(1, request_ID);
+			resultSet = this.findByIdStatement.executeQuery();
+			
+			while(resultSet.next()){
+				OperacionesOracle ope = new OperacionesOracle();
+				ope.setRequest_ID(resultSet.getString("request_ID"));
+				ope.setInstrumento(resultSet.getString("Instrumento"));
+				ope.setAccion(resultSet.getString("Accion"));
+				ope.setOrigen(resultSet.getString("Origen"));
+				ope.setMensaje(resultSet.getString("Mensaje"));
+				ope.setMensMN(resultSet.getString("MensMN"));
+				operaciones.add(ope);
+			}
+			return operaciones;
+		} catch (SQLException e) {
+
+			throw new DAOException(e.getMessage());
+			
+		}
+	}
+	
 	
 
 }

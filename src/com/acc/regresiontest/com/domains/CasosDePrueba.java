@@ -10,13 +10,13 @@ public class CasosDePrueba implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String nombreCaso;
-	private Operaciones operaciones;
+	private List<OperacionesMongo> operaciones;
 	
 	public CasosDePrueba() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CasosDePrueba(String nombreCaso, Operaciones operaciones) {
+	public CasosDePrueba(String nombreCaso, List<OperacionesMongo> operaciones) {
 		super();
 		this.nombreCaso = nombreCaso;
 		this.operaciones = operaciones;
@@ -30,11 +30,11 @@ public class CasosDePrueba implements Serializable{
 		this.nombreCaso = nombreCaso;
 	}
 
-	public Operaciones getOperaciones() {
+	public List<OperacionesMongo> getOperaciones() {
 		return operaciones;
 	}
 
-	public void setOperaciones(Operaciones operaciones) {
+	public void setOperaciones(List<OperacionesMongo> operaciones) {
 		this.operaciones = operaciones;
 	}
 
@@ -48,6 +48,8 @@ public class CasosDePrueba implements Serializable{
 		builder.append("]");
 		return builder.toString();
 	}
+	
+	
 	
 	
 
