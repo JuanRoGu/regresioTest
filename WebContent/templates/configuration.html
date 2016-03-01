@@ -4,14 +4,14 @@
       <form method="post">
         <table border="1">
 
-                <tr><th><input type="checkbox" /></th><th>idPeticion</th><th>Instrumento</th><th>Accion</th><th>origen</th></tr>
-                <tr><td><input type="checkbox" /></td><td>123421</td><td>swapDeals</td><td>insert</td><td>murex</td></tr>
+                <tr><th></th><th>idPeticion</th><th>Instrumento</th><th>Origen</th><th>accion</th></tr>
+                <tr ng-repeat =" seleccionados in regresion.seleccionados"><td><button class="btn btn-danger" ng-click="regresion.borrarSeleccionado(seleccionados.idPeticion)">Eliminar</button></td><td>{{seleccionados.idPeticion}}</td><td>{{seleccionados.instrumento}}</td><td>{{seleccionados.origen}}</td><td>{{seleccionados.accion}}</td></tr>
 
             </table>
             <br/>
             <div class="form-group">
                 <button class="btn btn-primary" >Ejecutar</button>
-                <button class="btn btn-danger" >Eliminar</button>
+               
             </div>
             
        		

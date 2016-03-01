@@ -15,6 +15,7 @@ $(document).ready(function() {
 		// Propierties
 		this.log = new UserObj();
 		this.logDB = new UserObj();
+		this.urlBase = "";
 		
 		// Scope variables
 		$scope.actionRegister = 0; // to show login form or register form
@@ -32,7 +33,7 @@ $(document).ready(function() {
 			var user = "Config";
 			
 			$.ajax({
-				url : 'http://localhost:8081/RegresionTest/api/login',
+				url : urlBase + "api/login",
 				type : 'POST',
 				async : false,
 				data  : "{'user':'"+this.log.user+"'}",
@@ -82,3 +83,9 @@ $(document).ready(function() {
 	});
 
 })();
+
+function rutaAbsoluta(){
+	 var loc = window.location;
+	 var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+	 return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+	}

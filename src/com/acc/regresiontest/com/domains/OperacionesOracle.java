@@ -12,21 +12,25 @@ public class OperacionesOracle implements Serializable {
 	private String Instrumento;
 	private String Accion;
 	private String Origen;
+	private String Destino;
 	private String Mensaje;
+	private String mensDestino;
 	private String MensMN;
-	
+
 	public OperacionesOracle() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public OperacionesOracle(String request_ID, String instrumento, String accion, String origen, String mensaje,
-			String mensMN) {
+	public OperacionesOracle(String request_ID, String instrumento, String accion, String origen, String destino,
+			String mensaje, String mensDestino, String mensMN) {
 		super();
 		this.request_ID = request_ID;
 		Instrumento = instrumento;
 		Accion = accion;
 		Origen = origen;
+		Destino = destino;
 		Mensaje = mensaje;
+		this.mensDestino = mensDestino;
 		MensMN = mensMN;
 	}
 
@@ -62,12 +66,28 @@ public class OperacionesOracle implements Serializable {
 		Origen = origen;
 	}
 
+	public String getDestino() {
+		return Destino;
+	}
+
+	public void setDestino(String destino) {
+		Destino = destino;
+	}
+
 	public String getMensaje() {
 		return Mensaje;
 	}
 
 	public void setMensaje(String mensaje) {
 		Mensaje = mensaje;
+	}
+
+	public String getMensDestino() {
+		return mensDestino;
+	}
+
+	public void setMensDestino(String mensDestino) {
+		this.mensDestino = mensDestino;
 	}
 
 	public String getMensMN() {
@@ -89,8 +109,12 @@ public class OperacionesOracle implements Serializable {
 		builder.append(Accion);
 		builder.append(", Origen=");
 		builder.append(Origen);
+		builder.append(", Destino=");
+		builder.append(Destino);
 		builder.append(", Mensaje=");
 		builder.append(Mensaje);
+		builder.append(", mensDestino=");
+		builder.append(mensDestino);
 		builder.append(", MensMN=");
 		builder.append(MensMN);
 		builder.append("]");
@@ -98,9 +122,4 @@ public class OperacionesOracle implements Serializable {
 	}
 	
 	
-	
-	
-	
-	
-
 }

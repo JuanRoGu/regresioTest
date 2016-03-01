@@ -4,17 +4,17 @@
       <form method="post">
         <table border="1">
 
-                <tr><th><input type="checkbox" /></th><th>idPeticion</th><th>Instrumento</th><th>Accion</th><th>origen</th></tr>
+                <tr><th>Select<th>idPeticion</th><th>Instrumento</th><th>origen</th><th>accion</th></tr>
                 <tr ng-repeat =" filtrado in regresion.peticionFiltrado">
                 
-                <td><input type="checkbox" /></td><td>{{filtrado.idPeticion}}</td><td>{{filtrado.instrumento}}</td><td>{{filtrado.accion}}</td><td>{{filtrado.origen}}</td></tr>
+                <td><input type="checkbox" ng-model = "filtrado.seleccionado" /></td><td>{{filtrado.idPeticion}}</td><td>{{filtrado.instrumento}}</td><td>{{filtrado.origen}}</td><td>{{filtrado.accion}}</td></tr>
 
             </table>
             <br/>
             <div class="form-group">
-                <button class="btn btn-primary" ng-click="showMenuConfiguration=1">Seleccionar</button>
+                <button class="btn btn-primary" ng-click="regresion.insertarSeleccionado();showMenuConfiguration=1">Seleccionar</button>
             </div>
-            
+            {{filtrado.seleccionado}}
       </form>
     </div>
 

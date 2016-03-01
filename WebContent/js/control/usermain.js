@@ -12,51 +12,51 @@ $(document).ready(function() {
 
 	var regresionTest = angular.module("regresionTest", [ "ng-currency" ]);
 	regresionTest.controller("regresionController", function($scope, $http) {
-		
-		
-		/************************************************ Variables**************************************************************/
-		
-		//filtrado
+
+		/**
+		 * **********************************************
+		 * Variables*************************************************************
+		 */
+
+		// filtrado
 		this.urlProfile = location.href.split("=")[1];
 		
-		
+		this.urlBase = "";
 		this.listadoresultado = [];
 		this.listadocasosprueba = [];
-		this.origen = [];
-		this.destino = [];
-		this.instrumento = [];
+		this.origenArray = [];
+		this.destinoArray = [];
+		this.instrumentoArray = [];
+		this.origen = "";
+		this.destino = "";
+		this.instrumento = "";
 		this.idPeticion = "";
-		this.fechaDesde = ""
+		this.fechaDesde = "";
 		this.fechaHasta = "";
 		this.todayDate = createTodayDate();
 		this.peticionFiltrado = [];
+		this.seleccionados = [];
+		this.valorTabla = "";
+
+		// Lista peticiones
+
 		
-		//Lista peticiones
-		
-		this.objAjaxPrueba = new peticionObj();
-		this.objAjaxPrueba.construct("444","emisiones","MLC","Deri","2016-02-01","2016-02-24");
-		
-		this.objprueba1 = new peticionObj();
-		this.objprueba1.construct("444","emisiones","MLC","Deri");
-		
-		this.objprueba2 = new peticionObj();
-		this.objprueba2.construct("232","BSB","murex","FusionDisk");
-		
-		
-		/******************************************FUNCIONES***************************************/
-		
-		
-		
-		this.logOut = function(){
-			window.open("index.html",target="_self");
-			
+
+
+		/** ****************************************FUNCIONES************************************** */
+
+		this.logOut = function() {
+			window.open("index.html", target = "_self");
+
 		}
 
 		this.initCombo = function() {
 			var outPutdata = [];
-
+			 this.urlBase = rutaAbsoluta();
+			 
+			
 			$.ajax({
-				url : 'http://localhost:8081/RegresionTest/api/configuration',
+				url : this.urlBase+"api/configuration",
 				type : 'GET',
 				async : false,
 				data : "",
@@ -71,50 +71,64 @@ $(document).ready(function() {
 
 			if (outPutdata != null) {
 				{
-					this.instrumento = outPutdata.instrumentos;
-					this.origen = outPutdata.origenes;
-					this.destino = outPutdata.destinos;
+					this.instrumentoArray = outPutdata.instrumentos;
+					this.origenArray = outPutdata.origenes;
+					this.destinoArray = outPutdata.destinos;
 
-				};
-			}
-			else {
+				}
+				;
+			} else {
 				alert("Error en la llamada");
 			}
 		};
 		
-		
-//envia la peticion con los datos seleccionados y recoge los diferentes objetos y los muestra en la tabla
-		
+
+		// envia la peticion con los datos seleccionados y recoge los diferentes
+		// objetos y los muestra en la tabla
+
 		this.filtrado = function() {
-		
-//			$.ajax({
-//				url : 'http://localhost:8081/RegresionTest/api/configuration',
-//				type : 'POST',
-//				async : false,
-//				data : "{'idPeticion':'"+this.requestID+"','instrumento':'"+this.instrumento.getInstrumento()+"'}",
-//				dataType : "json",
-//				success : function(response) {
-//					outPutdata = response;
-//				},
-//				error : function(xhr, ajaxOptions, thrownError) {
-//					alert(xhr.status + "\n" + thrownError);
-//				}
-//			});
-//			
-//
-//			if (outPutdata != null) {
-//				{
-//					this.instrumento = outPutdata.instrumentos;
-//					this.origen = outPutdata.origenes;
-//					this.destino = outPutdata.destinos;
-//
-//				};
-//			}
-			alert("{'idPeticion':'"+this.requestID+"','instrumento':'"+this.objAjaxPrueba.getInstrumento()+"'}");
-			this.peticionFiltrado.push(this.objprueba1);
-			this.peticionFiltrado.push(this.objprueba2);
+			
+			var outPutdata = [];
+
+			$.ajax({
+				url : this.urlBase+"api/configuration",
+				type : 'POST',
+				async : false,
+				data : "{'Id_Peticion':'" + this.idPeticion
+						+ "','Instrumento':'" + this.instrumento
+						+ "', 'Origen':'" + this.origen + "','Destino':'"
+						+ this.destino + "'" + ",'fechaDesde':'"
+						+ this.fechaDesde + "','fechaHasta':'"
+						+ this.fechaHasta + "'}",
+				dataType : "json",
+				success : function(response) {
+					outPutdata = response;
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					alert(xhr.status + "\n" + thrownError);
+				}
+			});
+
+			if (outPutdata != null) {
+				{
+												
+					this.peticionFiltrado = [];
+					for (var i = 0; i < outPutdata.length; i++) {
+						this.peticionObjetos = new peticionObj();
+						this.peticionObjetos.construct(outPutdata[i].request_ID, outPutdata[i].Instrumento,outPutdata[i].Accion
+								,outPutdata[i].Origen,outPutdata[i].Destino,outPutdata[i].Mensaje,outPutdata[i].MensMN
+								,outPutdata[i].MensDestino);
+						
+						this.peticionFiltrado.push(this.peticionObjetos);
+						
+						
+					}
+
+				}
+			}
+
 		};
-		
+
 		this.fechasValidas = function() {
 			var bool = true;
 
@@ -143,12 +157,49 @@ $(document).ready(function() {
 			}
 
 		};
-		
+
+		/**
+		 * Funcion que añade las peticiones seleccionadas en la tabla para
+		 * ejecutar, no admite repetidos.
+		 */
+		this.insertarSeleccionado = function() {
+			var igual;
+			for (var i = 0; i < this.peticionFiltrado.length; i++) {
+				if (this.peticionFiltrado[i].seleccionado) {
+					igual = false;
+					for (var j = 0; j < this.seleccionados.length; j++) {
+						if (this.peticionFiltrado[i].idPeticion == this.seleccionados[j].idPeticion) {
+							igual = true;
+						}
+					}
+					if (!igual) {
+						this.seleccionados.push(this.peticionFiltrado[i]);
+					}
+
+				}
+
+			}
+
+		};
+
+		/**
+		 * Borra de la tabla de seleccionados.
+		 */
+
+		this.borrarSeleccionado = function(id) {
+			for (var i = 0; i < this.seleccionados.length; i++) {
+				if (this.seleccionados[i].idPeticion == id) {
+					this.seleccionados.splice(i, 1);
+
+				}
+
+			}
+
+		};
+
 	});
 
-
-	
-	//Directivas
+	// Directivas
 
 	regresionTest.directive("configuration", function() {
 
@@ -170,7 +221,7 @@ $(document).ready(function() {
 			require : 'ngModel',
 			link : function(scope, el, attr, ngModel) {
 				$(el).datepicker({
-					dateFormat : 'yy-mm-dd',
+					dateFormat : 'yy/mm/dd',
 					onSelect : function(dateText) {
 						scope.$apply(function() {
 							ngModel.$setViewValue(dateText);
@@ -287,7 +338,6 @@ $(document).ready(function() {
 	});
 })();
 
-
 // funciones no angular
 function createTodayDate() {
 
@@ -308,3 +358,10 @@ function createTodayDate() {
 	return today;
 
 }
+
+function rutaAbsoluta(){
+	 var loc = window.location;
+	 var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+	 return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+	}
+ 

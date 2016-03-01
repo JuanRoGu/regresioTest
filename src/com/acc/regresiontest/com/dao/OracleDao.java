@@ -1,14 +1,18 @@
 package com.acc.regresiontest.com.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.acc.regresiontest.com.Exception.DAOException;
 import com.acc.regresiontest.com.domains.Datos;
+import com.acc.regresiontest.com.domains.OperacionesMongo;
 import com.acc.regresiontest.com.domains.OperacionesOracle;
 import com.acc.regresiontest.com.interfaces.IOracleDao;
 import com.acc.regresiontest.com.utils.ConnectionBD;
@@ -22,18 +26,21 @@ public class OracleDao implements IOracleDao {
 	private PreparedStatement findAllStatement;
 	private PreparedStatement findByIdStatement;
 	
+	private PreparedStatement findByIdStatement1;
 	private Connection conn;
 
 	public OracleDao() {
 		try {
+			
 			conn = ConnectionBD.getInstance();
+			
 			
 			this.findAllStatement = conn.prepareStatement("SELECT idpeticion, instrumento, accion, origen, destino, mensaje  "
 									+ "FROM operaciones");
 			
-			
-			this.findByIdStatement = conn.prepareStatement("SELECT REQUEST_ID,INSTRUMENTO,ACCION,ORIGEN,MENSAJE,MENSMN "
-									+ "FROM operaciones WHERE request_ID = ?");
+			this.findByIdStatement = conn.prepareStatement("SELECT REQUEST_ID,INSTRUMENTO,ACCION,ORIGEN,DESTINO,MENSAJE,MENSMN,MENSDESTINO "
+					+ "FROM operaciones WHERE request_ID = ? ");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -101,35 +108,70 @@ public class OracleDao implements IOracleDao {
 	}
 
 	@Override
-	public List<OperacionesOracle> findID(String request_ID) {
-		System.out.println("Entro en el metodo de buscar de oracle");
-		ResultSet resultSet = null;
-		
-		List<OperacionesOracle> operaciones = new ArrayList<>();
-		
-		try {
-			
-			this.findByIdStatement.setString(1, request_ID);
-			resultSet = this.findByIdStatement.executeQuery();
-			
-			while(resultSet.next()){
-				OperacionesOracle ope = new OperacionesOracle();
-				ope.setRequest_ID(resultSet.getString("request_ID"));
-				ope.setInstrumento(resultSet.getString("Instrumento"));
-				ope.setAccion(resultSet.getString("Accion"));
-				ope.setOrigen(resultSet.getString("Origen"));
-				ope.setMensaje(resultSet.getString("Mensaje"));
-				ope.setMensMN(resultSet.getString("MensMN"));
-				operaciones.add(ope);
-			}
-			return operaciones;
-		} catch (SQLException e) {
+    public List<OperacionesOracle> findID(
+            String Id_Peticion,
+            String Instrumento,
+            String Origen,
+            String Destino,
+            String fechaDesde, 
+            String fechaHasta) {
+        
+        String sentencia = "SELECT REQUEST_ID,INSTRUMENTO,ACCION,ORIGEN,DESTINO,MENSAJE,MENSMN,MENSDESTINO "
+                    + "FROM operaciones WHERE request_ID = '"+Id_Peticion+"'";
+        ResultSet resultSet = null;
+        List<OperacionesOracle> operaciones = new ArrayList<>();
+        
 
-			throw new DAOException(e.getMessage());
-			
-		}
-	}
-	
+        	System.out.println(Id_Peticion);
+        			System.out.println(Instrumento);
+        			System.out.println(Origen);
+        			System.out.println(Destino);
+        			System.out.println(fechaDesde);
+        			System.out.println(fechaHasta); 
+
+
+        try {
+        //Creo la sentencia
+        if(Instrumento.length() > 0){
+            sentencia = sentencia.concat(" AND Instrumento = '"+Instrumento+"'");
+        }else if(Origen.length() > 0){
+            sentencia =sentencia.concat(" AND Origen = '"+Origen+"'");
+        }else if(Destino.length() > 0){
+            sentencia =sentencia.concat(" AND Destino = '"+Destino+"'");
+        }else if(fechaDesde.length() >0){
+            sentencia =sentencia.concat(" AND fechaalta > '"+fechaDesde+"'");
+        }else if(fechaHasta.length() >0){
+            sentencia =sentencia.concat(" AND fechaalta < '"+fechaHasta+"'");
+        }
+        
+        System.out.println(sentencia);
+            this.findByIdStatement1 = conn.prepareStatement(sentencia);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        
+        try {
+            resultSet = this.findByIdStatement1.executeQuery();
+            
+            while(resultSet.next()){
+                OperacionesOracle ope = new OperacionesOracle();
+                ope.setRequest_ID(resultSet.getString("request_ID"));
+                ope.setInstrumento(resultSet.getString("Instrumento"));
+                ope.setAccion(resultSet.getString("Accion"));
+                ope.setOrigen(resultSet.getString("Origen"));
+                ope.setDestino(resultSet.getString("Destino"));
+                ope.setMensaje(resultSet.getString("Mensaje"));
+                ope.setMensMN(resultSet.getString("MensMN"));
+                ope.setMensDestino(resultSet.getString("MensDestino"));
+                operaciones.add(ope);
+            }
+            return operaciones;
+        } catch (SQLException e) {
+
+            throw new DAOException(e.getMessage());
+            
+        }
+    }
 	
 
 }

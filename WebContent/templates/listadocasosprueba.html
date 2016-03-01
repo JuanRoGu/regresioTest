@@ -1,15 +1,16 @@
 <div>
   <div>
-  	<h3>Listado casos de prueba</h3>
+  	<h4>Listado casos de prueba</h4>
   </div>
   <form method="post" action="listacasosprueba.do">
 	  <div>
         <select id="listadocasosprueba" required><option ng-repeat="o in regresion.listadocasosprueba" >{{o}}</option></select> 
 	  </div>
 	  <br>
-	  <div class="form-group">
-	      <INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Ejecutar">
-		  <INPUT TYPE=SUBMIT class="btn btn-danger" VALUE="Eliminar">
+	  <div class="form-group-sm">
+	      <INPUT TYPE=SUBMIT class="btn btn-primary btn-xs" VALUE="Ejecutar">
+	      <INPUT TYPE=SUBMIT class="btn btn-info btn-xs" VALUE="Modificar">
+		  <INPUT TYPE=SUBMIT class="btn btn-danger btn-xs" VALUE="Eliminar">
 	  </div>
   </form>
-</div>
+</div> 
