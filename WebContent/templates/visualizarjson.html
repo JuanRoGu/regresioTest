@@ -1,18 +1,20 @@
   <div>
   	<h3>Resultado ejecucion</h3>
   </div>
-  	<form method="post" action="guardarresultado.do">
+  	<form method="post">
  
 	  <div class="form-group">
 	      <label for="nombreresultado">Nombre Resultado</label>
 	      <input type="text" name="resultado" id="nombreresultado" value="" required/>
-	      <INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Guardar">
+	      <INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Guardar " ng-click = "regresion.prueba()">
 	  </div>
 	  <br>
-	  <div>
-	  
-	  <!-- Añadir código para visualizar el Json formateado	 --> 
-		  
-	  </div>
 	</form>
+	<table border = '1'>
+	<tr><td>
+	<div id="jsonviews">
+	</div>
+	</td></tr>
+	</table>
+	
 	   

@@ -9,6 +9,12 @@
 
    	<link rel="stylesheet" href="frameWorks/Bootstrap/bootstrap.min.css"/>
    	<link rel="stylesheet" href= "css/style.css"/>
+   	
+   	<link rel="stylesheet" type="text/css" href="css/redmond/jquery-ui-1.10.4.custom.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="css/redmond/dialogos.css" media="screen" />
+    
+     <!-- jTree -->
+        <link rel="stylesheet" type="text/css" href="frameWorks/jstree/themes/default/style.min.css" />
 
    
      <!-- Angular -->
@@ -19,11 +25,20 @@
     
     <script src="frameWorks/date_format/date_format.js" type="text/javascript" xml:space="preserve"></script>
    
-   <!-- query -->
-		<script src="frameWorks/jQuery/jQuery.js" type="text/javascript" xml:space="preserve"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type = "text/javascript"></script>
+   <!-- query json-->
+   		<script type="text/javascript" language="javascript" src="frameWorks/jQuery/jquery-2.0.3.js"></script>
+  
+	<!-- jQuery -->
+		
+		<script src="frameWorks/jQuery/jQuery.js" type="text/javascript" xml:space="preserve"></script> 
+<!--         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type = "text/javascript"></script>  -->
     	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type = "text/javascript"></script>
     	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel = "Stylesheet" type="text/css" />
+    	
+    	 	<!-- jTree -->
+   	<script type="text/javascript" language="javascript" src="frameWorks/jstree/jstree.min.js"></script>
+    	
+    	
         
    <!-- Control -->
    <script src="js/control/usermain.js" type="text/javascript" xml:space="preserve"></script>
@@ -43,6 +58,7 @@
 				<li ng-class="{active:showMenuOption==2}" ng-show= "regresion.urlProfile=='Config'" ng-model = "regresion.urlProfile"><a id="configuration" ng-click="showMenuOption=2">Configuration</a></li>
 				<li ng-class="{active:showMenuOption==3}"><a id="result" ng-click="showMenuOption=3">Result</a></li>
             	<li><a ng-click = regresion.logOut()>Logout</a></li>
+            	<li><a href="pruebas.html">pruebas</a></li>
         	</ul>
 	</nav>
 	 
@@ -58,7 +74,6 @@
      </div>
      
      <div id="resultDiv" ng-show="showMenuOption==3">
-               <result></result>
                 <div class="left">
                 	<visualizarjson></visualizarjson>
                 </div>

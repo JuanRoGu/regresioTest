@@ -49,6 +49,10 @@ $(document).ready(function() {
 			window.open("index.html", target = "_self");
 
 		}
+		
+		this.prueba = function(){
+			verJson();
+		};
 
 		this.initCombo = function() {
 			var outPutdata = [];
@@ -364,4 +368,22 @@ function rutaAbsoluta(){
 	 var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
 	 return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 	}
+
+function verJson(){
+$('#jsonviews').jstree(
+			
+			
+			{ 'core' : {
+			    'data' : [
+				
+				// ############ [START] JSON DE DIFERENCIAS ############
+				
+		{'text' : 'Resultados Test Case TC1','children' : [{'text' : 'personas[1]','children' : [{'text' : 'persona[1]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor encontrado: Manolo'},{'text' : 'Valor esperado: Pepe'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 25'},{'text' : 'Valor encontrado: 21'}]}]},{'text' : 'persona[2]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor esperado: Eva'},{'text' : 'Valor encontrado: pepin'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 29'},{'text' : 'Valor encontrado: 123'}]}]}]}]}
+
+				  
+				// ############ [FINISH] JSON DE DIFERENCIAS ############
+			    ]
+			} }
+			);
+}
  

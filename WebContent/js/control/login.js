@@ -15,7 +15,7 @@ $(document).ready(function() {
 		// Propierties
 		this.log = new UserObj();
 		this.logDB = new UserObj();
-		this.urlBase = "";
+		this.urlBase = rutaAbsoluta();
 		
 		// Scope variables
 		$scope.actionRegister = 0; // to show login form or register form
@@ -33,7 +33,7 @@ $(document).ready(function() {
 			var user = "Config";
 			
 			$.ajax({
-				url : urlBase + "api/login",
+				url : this.urlBase + "api/login",
 				type : 'POST',
 				async : false,
 				data  : "{'user':'"+this.log.user+"'}",
