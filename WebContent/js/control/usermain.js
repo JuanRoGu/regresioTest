@@ -14,30 +14,32 @@ $(document).ready(function() {
 	regresionTest.controller("regresionController", function($scope, $http) {
 
 		/**
-		 * **********************************************
-		 * Variables*************************************************************
+		 * **********************************************Variables*************************************************************
 		 */
 
-		// filtrado
-		this.urlProfile = location.href.split("=")[1];
 		
+		this.urlProfile = location.href.split("=")[1];
 		this.urlBase = "";
-		this.listadoresultado = [];
-		this.listadocasosprueba = [];
-		this.origenArray = [];
-		this.destinoArray = [];
-		this.instrumentoArray = [];
 		this.origen = "";
 		this.destino = "";
 		this.instrumento = "";
 		this.idPeticion = "";
 		this.fechaDesde = "";
 		this.fechaHasta = "";
+		
+		
+		this.listadoresultado = [];
+		this.listadocasosprueba = [];
+		this.origenArray = [];
+		this.destinoArray = [];
+		this.instrumentoArray = [];
 		this.todayDate = createTodayDate();
 		this.peticionFiltrado = [];
 		this.seleccionados = [];
 		this.valorTabla = "";
 
+		
+		
 		// Lista peticiones
 
 		
@@ -53,12 +55,86 @@ $(document).ready(function() {
 		this.prueba = function(){
 			verJson();
 		};
+		
+		
+		this.fechasValidas = function() {
+			var bool = true;
+
+			if (this.filtrado.fechaDesde > this.todayDate) {
+
+				$("#fechaDesde").removeClass("ng-valid");
+				$("#fechaDesde").addClass("ng-invalid");
+				bool = false;
+			} else {
+
+				$("#fechaDesde").removeClass("ng-invalid");
+				$("#fechaDesde").addClass("ng-valid");
+
+			}
+			if (this.reservation.fechaDesde >= this.reservation.fechaHasta) {
+
+				$("#fechaHasta").removeClass("ng-valid");
+				$("#fechaHasta").addClass("ng-invalid");
+
+				bool = false;
+			} else {
+
+				$("#fechaHasta").removeClass("ng-invalid");
+				$("#fechaHasta").addClass("ng-valid");
+
+			}
+
+		};
+
+		/**
+		 * Funcion que añade las peticiones seleccionadas en la tabla para
+		 * ejecutar, no admite repetidos.
+		 */
+		this.insertarSeleccionado = function() {
+			var igual;
+			for (var i = 0; i < this.peticionFiltrado.length; i++) {
+				if (this.peticionFiltrado[i].seleccionado) {
+					igual = false;
+					for (var j = 0; j < this.seleccionados.length; j++) {
+						if (this.peticionFiltrado[i].idPeticion == this.seleccionados[j].idPeticion) {
+							igual = true;
+						}
+					}
+					if (!igual) {
+						this.seleccionados.push(this.peticionFiltrado[i]);
+					}
+
+				}
+
+			}
+
+		};
+
+		/**
+		 * Borra de la tabla de seleccionados.
+		 */
+
+		this.borrarSeleccionado = function(id) {
+			for (var i = 0; i < this.seleccionados.length; i++) {
+				if (this.seleccionados[i].idPeticion == id) {
+					this.seleccionados.splice(i, 1);
+
+				}
+
+			}
+
+		};
+
+	});
+
+		
+		/*****************************************LLamadas AJAX******************************************************/
 
 		this.initCombo = function() {
+			
 			var outPutdata = [];
 			 this.urlBase = rutaAbsoluta();
 			 
-			
 			$.ajax({
 				url : this.urlBase+"api/configuration",
 				type : 'GET',
@@ -133,77 +209,7 @@ $(document).ready(function() {
 
 		};
 
-		this.fechasValidas = function() {
-			var bool = true;
-
-			if (this.filtrado.fechaDesde > this.todayDate) {
-
-				$("#fechaDesde").removeClass("ng-valid");
-				$("#fechaDesde").addClass("ng-invalid");
-				bool = false;
-			} else {
-
-				$("#fechaDesde").removeClass("ng-invalid");
-				$("#fechaDesde").addClass("ng-valid");
-
-			}
-			if (this.reservation.fechaDesde >= this.reservation.fechaHasta) {
-
-				$("#fechaHasta").removeClass("ng-valid");
-				$("#fechaHasta").addClass("ng-invalid");
-
-				bool = false;
-			} else {
-
-				$("#fechaHasta").removeClass("ng-invalid");
-				$("#fechaHasta").addClass("ng-valid");
-
-			}
-
-		};
-
-		/**
-		 * Funcion que añade las peticiones seleccionadas en la tabla para
-		 * ejecutar, no admite repetidos.
-		 */
-		this.insertarSeleccionado = function() {
-			var igual;
-			for (var i = 0; i < this.peticionFiltrado.length; i++) {
-				if (this.peticionFiltrado[i].seleccionado) {
-					igual = false;
-					for (var j = 0; j < this.seleccionados.length; j++) {
-						if (this.peticionFiltrado[i].idPeticion == this.seleccionados[j].idPeticion) {
-							igual = true;
-						}
-					}
-					if (!igual) {
-						this.seleccionados.push(this.peticionFiltrado[i]);
-					}
-
-				}
-
-			}
-
-		};
-
-		/**
-		 * Borra de la tabla de seleccionados.
-		 */
-
-		this.borrarSeleccionado = function(id) {
-			for (var i = 0; i < this.seleccionados.length; i++) {
-				if (this.seleccionados[i].idPeticion == id) {
-					this.seleccionados.splice(i, 1);
-
-				}
-
-			}
-
-		};
-
-	});
-
-	// Directivas
+/***************************************************DIRECTIVAS**********************************************************/
 
 	regresionTest.directive("configuration", function() {
 
