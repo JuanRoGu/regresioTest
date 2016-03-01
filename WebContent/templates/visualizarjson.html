@@ -1,20 +1,46 @@
-  <div>
-  	<h3>Resultado ejecucion</h3>
-  </div>
-  	<form method="post">
- 
-	  <div class="form-group">
-	      <label for="nombreresultado">Nombre Resultado</label>
-	      <input type="text" name="resultado" id="nombreresultado" value="" required/>
-	      <INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Guardar " ng-click = "regresion.prueba()">
-	  </div>
-	  <br>
+
+<div>
+	<h3>Resultado ejecucion</h3>
+</div>
+<div class="left">
+	<form method="post">
+
+		<div class="form-group">
+			<label for="nombreresultado">Nombre Resultado</label> <input
+				type="text" name="resultado" id="nombreresultado" value="" required />
+			<INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Guardar ">
+		</div>
 	</form>
-	<table border = '1'>
-	<tr><td>
-	<div id="jsonviews">
+</div>
+
+
+<div class="right">
+	<div>
+		<h3>Listado resultados</h3>
 	</div>
-	</td></tr>
+
+	<div>
+		<select id="listadoresultado" required
+			ng-model="regresion.selectresult"><option
+				ng-repeat="o in regresion.listadoresultado">{{o.nombre}}</option></select>
+	</div>
+	<br>
+	<div class="form-group">
+		<INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Visualizar"
+			ng-click="regresion.visualizaJson()"> <INPUT TYPE=SUBMIT
+			class="btn btn-danger" VALUE="Eliminar">
+	</div>
+
+</div>
+
+
+<div>
+	<table border='1'>
+		<tr>
+			<td>
+				<div id="jsonviews"></div>
+			</td>
+		</tr>
 	</table>
-	
-	   
+</div>
+

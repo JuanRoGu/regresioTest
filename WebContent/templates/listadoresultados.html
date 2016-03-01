@@ -5,11 +5,11 @@
   </div>
   
 	  <div>
-        <select id="listadoresultado" required><option ng-repeat="o in regresion.listadoresultado" >{{o}}</option></select> 
+        <select id="listadoresultado" required ng-model="regresion.selectresult"><option ng-repeat="o in regresion.listadoresultado"  >{{o.nombre}}</option></select> 
 	  </div>
 	  <br>
 	  <div class="form-group">
-	      <INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Visualizar">
+	      <INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Visualizar" ng-click = "regresion.visualizaJson()" >
 		  <INPUT TYPE=SUBMIT class="btn btn-danger" VALUE="Eliminar">
 	  </div>
   

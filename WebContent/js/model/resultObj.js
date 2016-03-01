@@ -7,8 +7,8 @@ function resultObj()
     //Constructor
     this.construct = function (nombre,json)
     {
-        this.setIdPeticion(nombre);
-        this.setInstrumento(json);
+        this.setNombre(nombre);
+        this.setJson(json);
     };
     
  // getters && Setters

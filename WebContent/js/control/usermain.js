@@ -26,6 +26,8 @@ $(document).ready(function() {
 		this.idPeticion = "";
 		this.fechaDesde = "";
 		this.fechaHasta = "";
+		this.valorTabla = "";
+		this.selectresult = "";
 		
 		
 		this.listadoresultado = [];
@@ -36,11 +38,17 @@ $(document).ready(function() {
 		this.todayDate = createTodayDate();
 		this.peticionFiltrado = [];
 		this.seleccionados = [];
-		this.valorTabla = "";
+		
 
+		this.resultobjetos = new resultObj();
+		this.resultobjetos.construct("ejecucion1","{ 'core' : {'data' : [{'text' : 'Resultados Test Case TC1','children' : [{'text' : 'personas[1]','children' : [{'text' : 'persona[1]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor encontrado: Manolo'},{'text' : 'Valor esperado: Pepe'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 25'},{'text' : 'Valor encontrado: 21'}]}]},{'text' : 'persona[2]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor esperado: Eva'},{'text' : 'Valor encontrado: pepin'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 29'},{'text' : 'Valor encontrado: 123'}]}]}]}]} 		} }");
+		this.listadoresultado.push(this.resultobjetos);
+		
+		this.resultobjetos2 = new resultObj();
+		this.resultobjetos2.construct("ejecucion2","{ 'core' : {'data' : [{'text' : 'Resultados Test Case TC1','children' : [{'text' : 'personas[1]','children' : [{'text' : 'persona[1]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor encontrado: Suarez'},{'text' : 'Valor esperado: Luisito'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 26'},{'text' : 'Valor encontrado: 29'}]}]},{'text' : 'persona[2]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor esperado: leo'},{'text' : 'Valor encontrado: Messi'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 29'},{'text' : 'Valor encontrado: 37'}]}]}]}]}]}}");
+		this.listadoresultado.push(this.resultobjetos2);
 		
 		
-		// Lista peticiones
 
 		
 
@@ -52,8 +60,15 @@ $(document).ready(function() {
 
 		}
 		
-		this.prueba = function(){
-			verJson();
+		this.visualizaJson = function(){
+			for(var i =0; i<this.listadoresultado.length; i++){
+				alert(this.listadoresultado[i].nombre+" " + this.selectresult);
+				if(this.listadoresultado[i].nombre == this.selectresult){
+					
+					verJson(this.listadoresultado[i].json);
+				}
+			}
+			
 		};
 		
 		
@@ -208,6 +223,7 @@ $(document).ready(function() {
 			}
 
 		};
+		
 
 /***************************************************DIRECTIVAS**********************************************************/
 
@@ -375,21 +391,9 @@ function rutaAbsoluta(){
 	 return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 	}
 
-function verJson(){
-$('#jsonviews').jstree(
-			
-			
-			{ 'core' : {
-			    'data' : [
-				
-				// ############ [START] JSON DE DIFERENCIAS ############
-				
-		{'text' : 'Resultados Test Case TC1','children' : [{'text' : 'personas[1]','children' : [{'text' : 'persona[1]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor encontrado: Manolo'},{'text' : 'Valor esperado: Pepe'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 25'},{'text' : 'Valor encontrado: 21'}]}]},{'text' : 'persona[2]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor esperado: Eva'},{'text' : 'Valor encontrado: pepin'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 29'},{'text' : 'Valor encontrado: 123'}]}]}]}]}
+function verJson(json){	$('#jsonviews').jstree(json);	
 
-				  
-				// ############ [FINISH] JSON DE DIFERENCIAS ############
-			    ]
-			} }
-			);
+		
+
 }
  
