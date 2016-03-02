@@ -1,0 +1,189 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Customizations</title>
+  <!-- COMPONENTS -->
+  <script type="text/javascript" src="../../../_lib/_all.js"></script>
+  <script type="text/javascript" src="../../source/tree_component.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../source/tree_component.css" />
+
+  <script type="text/javascript" src="../bubble.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../style.css" />
+
+<style type="text/css">
+/** DEFAULT ICON FOR ALL TREES */
+.tree li a {
+  background-image:url("../images/f.png");
+}
+/** DEFAULT ICON FOR A SPECIFIC TREE **/
+#demo li a {
+  background-image:url("../images/f.png");
+}
+/** DEFAULT STATE ICONS FOR A SPECIFIC TREE **/
+#demo li.open a {
+  background-image:url("../images/folder_o.png");
+}
+#demo li.closed a {
+  background-image:url("../images/folder_c.png");
+}
+#demo li.leaf a {
+  background-image:url("../images/folder.png");
+}
+/** BACKGROUND **/
+.tree,
+.tree ul, 
+.tree li.last {
+  background-color:#666 !important;
+}
+/** TEXT COLOR **/
+.tree li a {
+  color:white !important;
+}
+.tree li a:hover,
+.tree li a.hover,
+.tree li a.clicked {
+  color:navy !important;
+}
+/** SELECTION COLORS **/
+.tree li a:hover,
+.tree li a.hover {
+  background-color:#DFB5B5;
+  border-color:#8F6262;
+}
+.tree li a.clicked,
+.tree li a.clicked:hover {
+  background-color:#BF2F2F;
+  border-color:#5F0000;
+}
+/** FONTSIZE/FAMILY/COLOR/HEIGHT **/
+.tree li {
+  font-size:11px;
+  line-height:20px;
+  min-height:20px;
+  font-family:Georgia;
+}
+.tree li a {
+  line-height:18px;
+  height:18px;
+}
+</style>
+
+  <!-- INITIALIZE -->
+  <script type="text/javascript">
+    $(function() {
+      $("#demo").height($(".sources").height() - 12);
+    });
+$(function() {
+  tree1 = new tree_component();
+  tree1.init($("#demo"), { 
+    data  : {
+      type  : "xml_flat",
+      url   : "flat.xml"
+    },
+    ui : {
+      animation : 500,
+      rtl : false,
+      dots : true
+    }
+  });
+});
+  </script>
+</head>
+<body>
+<div id="container">
+<h1>Customizations</h1>
+<p>In this section you can find different ways of modifying the looks and feel of jsTree.</p>
+<dl>
+<dt>Right-to-left text:</dt>
+<dd>Set the 'rtl' class on the container (in the HTML or run time using JS (doesn't matter), or use the settings.ui.rtl property.</dd>
+<dt>Connecting dots:</dt>
+<dd>Set the 'no_dots' class on the container (in the HTML or run time using JS (doesn't matter), or use the settings.ui.dots property.</dd>
+<dt>Animation:</dt>
+<dd>Use the settings.ui.animation property - the value is the speed of the animation in miliseconds. Default is 0 for no animation.</dd>
+<dt>Hover mode</dt>
+<dd>The get_* (commonly used with keyboard shortcuts) functions hover the node instead of selecting it.</dd>
+<dt>Icons, Colors, Sizes</dt>
+<dd>Previously we covered specifying icons in vairous data sources per-node. Check the css below to see how to set default icons.<br /><sup>*</sup> NOTE: if you want to modify icon position use background-position:x y !important, but keep in mind that you might lose rtl switching (or provide an alternative positioning for rtl using the .rtl class in the selector).</dd>
+</dl>
+<input type="button" value="$('#demo').toggleClass('rtl');" onclick="$('#demo').toggleClass('rtl');" />
+<input type="button" value="$('#demo').toggleClass('no_dots');" onclick="$('#demo').toggleClass('no_dots');" />
+<br /><br />
+<div class="demo" id="demo"></div>
+<div class="sources">
+<code class="source"><b>javascript</b>$(function() {
+  tree1 = new tree_component();
+  tree1.init($("#demo"), { 
+    data  : {
+      type  : "xml_flat",
+      url   : "flat.xml"
+    },
+    ui : {
+      animation : 500,
+      rtl : false,
+      dots : true
+    }
+  });
+});
+</code>
+<code class="source"><b>css</b>/** DEFAULT ICON FOR ALL TREES */
+.tree li a {
+  background-image:url("../images/f.png");
+}
+/** DEFAULT ICON FOR A SPECIFIC TREE **/
+#demo li a {
+  background-image:url("../images/f.png");
+}
+/** DEFAULT STATE ICONS FOR A SPECIFIC TREE **/
+#demo li.open a {
+  background-image:url("../images/folder_o.png");
+}
+#demo li.closed a {
+  background-image:url("../images/folder_c.png");
+}
+#demo li.leaf a {
+  background-image:url("../images/folder.png");
+}
+/** BACKGROUND **/
+.tree,
+.tree ul, 
+.tree li.last {
+  background-color:#666 !important;
+}
+/** TEXT COLOR **/
+.tree li a {
+  color:white !important;
+}
+.tree li a:hover,
+.tree li a.hover,
+.tree li a.clicked {
+  color:navy !important;
+}
+/** SELECTION COLORS **/
+.tree li a:hover,
+.tree li a.hover {
+  background-color:#DFB5B5;
+  border-color:#8F6262;
+}
+.tree li a.clicked,
+.tree li a.clicked:hover {
+  background-color:#BF2F2F;
+  border-color:#5F0000;
+}
+/** FONTSIZE/FAMILY/COLOR/HEIGHT **/
+.tree li {
+  font-size:11px;
+  line-height:20px;
+  min-height:20px;
+  font-family:Georgia;
+}
+.tree li a {
+  line-height:18px;
+  height:18px;
+}
+</code>
+</div>
+</body>
