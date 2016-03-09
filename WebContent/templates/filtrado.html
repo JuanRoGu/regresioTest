@@ -1,18 +1,29 @@
-<h3>Lista de peticiones</h3>
+<br>
+<h4>Lista de peticiones</h4>
 
     <div>
       <form method="post">
-        <table border="1">
-
-                <tr><th>Select<th>idPeticion</th><th>Instrumento</th><th>origen</th><th>accion</th></tr>
-                <tr ng-repeat =" filtrado in regresion.peticionFiltrado">
-                
-                <td><input type="checkbox" ng-model = "filtrado.seleccionado" /></td><td>{{filtrado.idPeticion}}</td><td>{{filtrado.instrumento}}</td><td>{{filtrado.origen}}</td><td>{{filtrado.accion}}</td></tr>
-
-            </table>
-            <br/>
+        <table class="table table-hover" border="1">
+		<thead>
+			<tr>
+				<th class="col-xs-1">Select</th><th>Resquest_Id</th><th>Instrumento</th><th>origen</th><th>accion</th>
+			</tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat =" filtrado in regresion.peticionFiltrado">
+                <td class="col-xs-1">
+                	<input type="checkbox" ng-model = "filtrado.seleccionado" />
+                </td>
+                <td>{{filtrado.idPeticion}}</td>
+                <td>{{filtrado.instrumento}}</td>
+                <td>{{filtrado.origen}}</td>
+                <td>{{filtrado.accion}}</td>
+            </tr>
+        </tbody>
+        </table>
+        
             <div class="form-group">
-                <button class="btn btn-primary" ng-click="regresion.insertarSeleccionado();showMenuConfiguration=1">Seleccionar</button>
+                <button class="btn btn-primary btn-xs" ng-click="regresion.insertarSeleccionado();showMenuConfiguration=1">Seleccionar</button>
             </div>
             {{filtrado.seleccionado}}
       </form>

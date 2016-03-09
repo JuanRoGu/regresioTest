@@ -12,8 +12,8 @@
    	
    	<link rel="stylesheet" type="text/css" href="css/redmond/jquery-ui-1.10.4.custom.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="css/redmond/dialogos.css" media="screen" />
-    
-    
+     <link rel="stylesheet" type="text/css" href="frameWorks/jtree/js/jstree/themes/default/style.min.css" />
+
 
    
      <!-- Angular -->
@@ -27,11 +27,19 @@
    
   
 	<!-- jQuery -->
+	
 		
-		<script src="frameWorks/jQuery/jQuery.js" type="text/javascript" xml:space="preserve"></script> 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type = "text/javascript"></script>
-    	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type = "text/javascript"></script>
+		<script type="text/javascript" language="javascript" src="frameWorks/jtree/js/jquery-2.0.3.js"></script>
+<!-- 		<script src="frameWorks/jQuery/jQuery.js" type="text/javascript" xml:space="preserve"></script>  -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type = "text/javascript"></script>
     	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel = "Stylesheet" type="text/css" />
+		
+		<!-- jTree -->
+		<script type="text/javascript" language="javascript" src="frameWorks/jtree/js/jstree/jstree.min.js"></script>
+		
+
+    	
     	    	
     	
         
@@ -42,12 +50,7 @@
    	<script src="js/model/resultObj.js" type="text/javascript" xml:space="preserve"></script>
    
 	
-   	    	
-	<!--jtree -->
 	
-	<script src="frameWorks/treeView/_lib/_all.js"></script>
-	<script src="frameWorks/treeView/jsTree/sources/tree_component.js"></script>
-	<link type="text/css" href="frameWorks/treeView/jsTree/sources/tree_component.css" />
     
     
        
@@ -59,13 +62,19 @@
     
      <nav class="navbar navbar-default" role="navigation">
         	<ul class="nav nav-tabs">
+        		<li>&nbsp;&nbsp;&nbsp;</li>
+        		<li><img src="image/logo.png" height="41" width="42"></img></li>
+        		<li>&nbsp;&nbsp;&nbsp;</li>
 				<li ng-class="{active:showMenuOption==1}"><a id="execution" ng-click="showMenuOption=1">Execution</a></li>
 				<li ng-class="{active:showMenuOption==2}" ng-show= "regresion.urlProfile=='Config'" ng-model = "regresion.urlProfile"><a id="configuration" ng-click="showMenuOption=2">Configuration</a></li>
 				<li ng-class="{active:showMenuOption==3}"><a id="result" ng-click="showMenuOption=3">Result</a></li>
-            	<li><a ng-click = regresion.logOut()>Logout</a></li>
-            	<li><a href="pruebas.html">pruebas</a></li>
+				<li ><a href ="pruebas.html">pruebas</a></li>
+				
+            	<li class="pull-right">&nbsp;&nbsp;&nbsp;</li>
+            	<li class="pull-right"><a ng-click = regresion.logOut()>Logout</a></li>
+          
         	</ul>
-	</nav>
+	 </nav>
 	 
 	 <div id="executionDiv" ng-show="showMenuOption==1">
                 

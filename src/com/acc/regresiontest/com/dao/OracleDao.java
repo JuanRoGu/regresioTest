@@ -15,13 +15,15 @@ import com.acc.regresiontest.com.domains.Datos;
 import com.acc.regresiontest.com.domains.OperacionesMongo;
 import com.acc.regresiontest.com.domains.OperacionesOracle;
 import com.acc.regresiontest.com.interfaces.IOracleDao;
+import com.acc.regresiontest.com.properties.SavePropertiesMongo;
+import com.acc.regresiontest.com.properties.SavePropertiesOracle;
 import com.acc.regresiontest.com.utils.ConnectionBD;
 
 
 
 
 public class OracleDao implements IOracleDao {
-
+	SavePropertiesOracle p = new SavePropertiesOracle();
 
 	private PreparedStatement findAllStatement;
 	private PreparedStatement findByIdStatement;
@@ -75,7 +77,7 @@ public class OracleDao implements IOracleDao {
 
 	@Override
 	public Datos findByid(String id) {
-		
+		p = p.obtener();
 
 		ResultSet resultSet = null;
 		
@@ -108,70 +110,80 @@ public class OracleDao implements IOracleDao {
 	}
 
 	@Override
-    public List<OperacionesOracle> findID(
-            String Id_Peticion,
-            String Instrumento,
-            String Origen,
-            String Destino,
-            String fechaDesde, 
-            String fechaHasta) {
-        
-        String sentencia = "SELECT REQUEST_ID,INSTRUMENTO,ACCION,ORIGEN,DESTINO,MENSAJE,MENSMN,MENSDESTINO "
-                    + "FROM operaciones WHERE request_ID = '"+Id_Peticion+"'";
-        ResultSet resultSet = null;
-        List<OperacionesOracle> operaciones = new ArrayList<>();
-        
+	public List<OperacionesOracle> findID(
+			String Id_Peticion,
+			String Instrumento,
+			String Origen,
+			String Destino,
+			String fechaDesde, 
+			String fechaHasta) {
+		
+		p = p.obtener();
+		
+//		SELECT REQUEST_ID,INSTRUMENTO,ACCION,ORIGEN,DESTINO,MENSAJE,MENSMN,MENSDESTINO "
+//				+ "FROM operaciones WHERE ID = '"+Id_Peticion+"'"
+		String sentencia = "SELECT "
+				+ ""+p.getREQUEST_IDO()+","
+				+ ""+p.getINSTRUMENTOO()+","
+				+ ""+p.getACCIONO()+","
+				+ ""+p.getORIGENO()+","
+				+ ""+p.getDESTINOO()+","
+				+ ""+p.getMENSAJEO()+","
+				+ ""+p.getMENSMNO()+","
+				+ ""+p.getMENSDESTINOO()+" "
+					+ "FROM "+p.getOPERACIONESO()+" WHERE "+p.getIDO()+" = '"+Id_Peticion+"'";
+		ResultSet resultSet = null;
+		List<OperacionesOracle> operaciones = new ArrayList<>();
 
-        	System.out.println(Id_Peticion);
-        			System.out.println(Instrumento);
-        			System.out.println(Origen);
-        			System.out.println(Destino);
-        			System.out.println(fechaDesde);
-        			System.out.println(fechaHasta); 
+		try {
+		//Creo la sentencia
+		if(Instrumento.length() > 0){
+			sentencia = sentencia.concat(" AND "+p.getINSTRUMENTOO()+" = '"+Instrumento+"'");
+		}else if(Origen.length() > 0){
+			sentencia =sentencia.concat(" AND "+p.getORIGENO()+" = '"+Origen+"'");
+		}else if(Destino.length() > 0){
+			sentencia =sentencia.concat(" AND "+p.getDESTINOO()+" = '"+Destino+"'");
+		}else if(fechaDesde.length() >0){
+			sentencia =sentencia.concat(" AND "+p.getFECHAALTAO()+" > '"+fechaDesde+"'");
+		}else if(fechaHasta.length() >0){
+			sentencia =sentencia.concat(" AND "+p.getFECHAALTAO()+" < '"+fechaHasta+"'");
+		}
+		
+		System.out.println(sentencia);
+			this.findByIdStatement1 = conn.prepareStatement(sentencia);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		try {
+			resultSet = this.findByIdStatement1.executeQuery();
+			
+			while(resultSet.next()){
+				OperacionesOracle ope = new OperacionesOracle();
+//				ope.setRequest_ID(resultSet.getString("request_ID"));
+//				ope.setInstrumento(resultSet.getString("Instrumento"));
+//				ope.setAccion(resultSet.getString("Accion"));
+//				ope.setOrigen(resultSet.getString("Origen"));
+//				ope.setDestino(resultSet.getString("Destino"));
+//				ope.setMensaje(resultSet.getString("Mensaje"));
+//				ope.setMensMN(resultSet.getString("MensMN"));
+//				ope.setMensDestino(resultSet.getString("MensDestino"));
+				
+				ope.setRequest_ID(resultSet.getString(""+p.getREQUEST_IDO()+""));
+				ope.setInstrumento(resultSet.getString(""+p.getINSTRUMENTOO()+""));
+				ope.setAccion(resultSet.getString(""+p.getACCIONO()+""));
+				ope.setOrigen(resultSet.getString(""+p.getORIGENO()+""));
+				ope.setDestino(resultSet.getString(""+p.getDESTINOO()+""));
+				ope.setMensaje(resultSet.getString(""+p.getMENSAJEO()+""));
+				ope.setMensMN(resultSet.getString(""+p.getMENSMNO()+""));
+				ope.setMensDestino(resultSet.getString(""+p.getMENSDESTINOO()+""));
+				operaciones.add(ope);
+			}
+			return operaciones;
+		} catch (SQLException e) {
 
-
-        try {
-        //Creo la sentencia
-        if(Instrumento.length() > 0){
-            sentencia = sentencia.concat(" AND Instrumento = '"+Instrumento+"'");
-        }else if(Origen.length() > 0){
-            sentencia =sentencia.concat(" AND Origen = '"+Origen+"'");
-        }else if(Destino.length() > 0){
-            sentencia =sentencia.concat(" AND Destino = '"+Destino+"'");
-        }else if(fechaDesde.length() >0){
-            sentencia =sentencia.concat(" AND fechaalta > '"+fechaDesde+"'");
-        }else if(fechaHasta.length() >0){
-            sentencia =sentencia.concat(" AND fechaalta < '"+fechaHasta+"'");
-        }
-        
-        System.out.println(sentencia);
-            this.findByIdStatement1 = conn.prepareStatement(sentencia);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        
-        try {
-            resultSet = this.findByIdStatement1.executeQuery();
-            
-            while(resultSet.next()){
-                OperacionesOracle ope = new OperacionesOracle();
-                ope.setRequest_ID(resultSet.getString("request_ID"));
-                ope.setInstrumento(resultSet.getString("Instrumento"));
-                ope.setAccion(resultSet.getString("Accion"));
-                ope.setOrigen(resultSet.getString("Origen"));
-                ope.setDestino(resultSet.getString("Destino"));
-                ope.setMensaje(resultSet.getString("Mensaje"));
-                ope.setMensMN(resultSet.getString("MensMN"));
-                ope.setMensDestino(resultSet.getString("MensDestino"));
-                operaciones.add(ope);
-            }
-            return operaciones;
-        } catch (SQLException e) {
-
-            throw new DAOException(e.getMessage());
-            
-        }
-    }
-	
-
+			throw new DAOException(e.getMessage());
+			
+		}
+	}
 }

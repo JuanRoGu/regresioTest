@@ -11,6 +11,7 @@ public class CasosDePrueba implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String nombreCaso;
 	private List<OperacionesMongo> operaciones;
+	List<String> casosdeprueba;
 	
 	public CasosDePrueba() {
 		// TODO Auto-generated constructor stub
@@ -47,6 +48,14 @@ public class CasosDePrueba implements Serializable{
 		builder.append(operaciones);
 		builder.append("]");
 		return builder.toString();
+	}
+	
+	public List<String> getCasosPrueba() {
+		return casosdeprueba;
+	}
+
+	public void setCasosPrueba(List<String> casosdeprueba) {
+		this.casosdeprueba = casosdeprueba;
 	}
 	
 	

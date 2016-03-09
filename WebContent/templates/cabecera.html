@@ -1,7 +1,8 @@
-<h3>Filtrado de peticiones</h3>
+<h4>Filtrado de peticiones</h4>
 <div ng-init ="regresion.initCombo()">
+
 <form name = "filtradoForm" ng-submit = "filtradoForm.valid">
-		<table class= "tabla">
+	<table class="table table-hover">
 		<tr>
 			<td>
 				<label for="idPeticion">IdPeticion: </label>
@@ -16,8 +17,8 @@
        			<input calendar name = "date" id="fechaDesde"  ng-model="regresion.fechaDesde"/>
        		 </td>
        	</tr>
-       	
-       	<td>
+       	<tr>
+       		 <td>
 				<label for="instrumento">Instrumento: </label>
         		<select id="instrumento" ng-model = "regresion.instrumento"> <option  ng-repeat="i in regresion.instrumentoArray" >{{i}}</option></select>
        		 </td>
@@ -29,11 +30,34 @@
        		 	<label>Fecha peticion hasta: </label>
        			<input calendar name = "date" id="fechasHasta"  ng-model="regresion.fechaHasta"/>
        		 </td>
-       		 
-       		 <tr><td><button type="submit" class="btn btn-primary" ng-click="showMenufiltrado=1; regresion.filtrado()">Filtrar</button><span> </span><span> </span><span> </span><button type="reset" ng-click="showMenufiltrado=0" class="btn btn-danger">Reset</button></td></tr>
+       	</tr>
+       	<tr>
+       		<td>
+       			<label for="entorno"> Entorno: </label>
+        		<select type = "text" id="entorno" ng-model = "regresion.entorno"  required><option  ng-repeat="e in regresion.entornoArray">{{e}}</option></select>
+       		</td>
+       		<td>
+       			
+       		</td>
+       		<td>
+       			
+       		</td>
+       		
+       	</tr>
+       	<tr>
+       		<td>
+       			<button type="submit" class="btn btn-primary btn-xs" ng-click="showMenufiltrado=1; regresion.filtrado()">Filtrar</button><span> </span><span> </span><span> </span><button type="reset" ng-click="showMenufiltrado=0; regresion.reset()" class="btn btn-danger btn-xs">Reset</button>
+       		</td>
+       		<td>
+       			
+       		</td>
+       		<td>
+       			
+       		</td>
+       	</tr>
 		
 		</table>
-	</form>
+</form>
 	
 	
 </div>

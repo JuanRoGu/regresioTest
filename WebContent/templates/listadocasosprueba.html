@@ -1,16 +1,24 @@
-<div>
+<div ng-init ="regresion.initCasosprueba()">
   <div>
   	<h4>Listado casos de prueba</h4>
   </div>
-  <form method="post" action="listacasosprueba.do">
-	  <div>
-        <select id="listadocasosprueba" required><option ng-repeat="o in regresion.listadocasosprueba" >{{o}}</option></select> 
+  <br/>
+  <form name="casospruebaForm" class="form-inline" ng-submit = "casospruebaForm.valid">
+	  <div class="form-group">
+	  	<label for="casosprueba"> Casos de prueba: </label>
+        <select type = "text" id="casosprueba" ng-model = "regresion.casosprueba" required="required"><option ng-repeat="l in regresion.listadocasosprueba">{{l}}</option></select>
 	  </div>
-	  <br>
+	  &nbsp &nbsp
+	  <div class="form-group">
+	  	<label for="origen"> Entorno de ejecucion</label>
+        <select type = "text" id="casosprueba" ng-model = "regresion.entornoEjecucion" required><option ng-repeat="e in regresion.entornoResultArray" >{{e}}</option></select>
+	  </div>
+	  <br/>
+	  <br/>
 	  <div class="form-group-sm">
 	      <INPUT TYPE=SUBMIT class="btn btn-primary btn-xs" VALUE="Ejecutar">
-	      <INPUT TYPE=SUBMIT class="btn btn-info btn-xs" VALUE="Modificar">
-		  <INPUT TYPE=SUBMIT class="btn btn-danger btn-xs" VALUE="Eliminar">
+	      <INPUT ng-show= "regresion.urlProfile=='Config'" TYPE=SUBMIT class="btn btn-info btn-xs" VALUE="Modificar">
+		  <INPUT ng-show= "regresion.urlProfile=='Config'" TYPE=SUBMIT class="btn btn-danger btn-xs" VALUE="Eliminar" ng-click ="regresion.eliminarCaso()">
 	  </div>
   </form>
 </div> 

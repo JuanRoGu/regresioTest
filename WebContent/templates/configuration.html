@@ -1,26 +1,39 @@
 
-    <h3>Lista de operaciones seleccionadas</h3>
-    <div>
-      <form method="post">
-        <table border="1">
-
-                <tr><th></th><th>idPeticion</th><th>Instrumento</th><th>Origen</th><th>accion</th></tr>
-                <tr ng-repeat =" seleccionados in regresion.seleccionados"><td><button class="btn btn-danger" ng-click="regresion.borrarSeleccionado(seleccionados.idPeticion)">Eliminar</button></td><td>{{seleccionados.idPeticion}}</td><td>{{seleccionados.instrumento}}</td><td>{{seleccionados.origen}}</td><td>{{seleccionados.accion}}</td></tr>
-
-            </table>
-            <br/>
-            <div class="form-group">
-                <button class="btn btn-primary" >Ejecutar</button>
-               
-            </div>
-            
-       		
+<br>
+<h4>Lista de operaciones seleccionadas</h4>
+<div>
+	<form method="post">
+		<table class="table table-hover" border="1">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Resquest_Id</th>
+					<th>Instrumento</th>
+					<th>Origen</th>
+					<th>accion</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat=" seleccionados in regresion.seleccionados">
+					<td><button class="btn btn-danger btn-xs"
+							ng-click="regresion.borrarSeleccionado(seleccionados.idPeticion)">Eliminar</button></td>
+					<td>{{seleccionados.idPeticion}}</td>
+					<td>{{seleccionados.instrumento}}</td>
+					<td>{{seleccionados.origen}}</td>
+					<td>{{seleccionados.accion}}</td>
+				</tr>
+			</tbody>
+		</table>
 		<div class="form-group">
-	      <label for="nombreresultado">Nombre Resultado</label>
-	      <input type="text" name="resultado" id="nombreresultado" value="" required/>
-	      <INPUT TYPE=SUBMIT class="btn btn-primary" VALUE="Guardar">
-	  </div> 
-       		
-            
-      </form>
-    </div>
+			<button class="btn btn-primary btn-xs">Ejecutar</button>
+		</div>
+		<br>
+		<div class="form-group">
+			<label for="nombreresultado">Nombre caso de prueba</label> <input
+				ng-model="regresion.nombreCaso" type="text" name="resultado"
+				id="nombreresultado" value="" required /> <INPUT TYPE=SUBMIT
+				class="btn btn-primary btn-xs" VALUE="Guardar"
+				ng-click="regresion.guardarCaso()">
+				<div id = "alert"></div>
+	</form>
+</div>

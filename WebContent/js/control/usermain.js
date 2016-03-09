@@ -28,6 +28,13 @@ $(document).ready(function() {
 		this.fechaHasta = "";
 		this.valorTabla = "";
 		this.selectresult = "";
+		this.nombreCaso = "";
+		this.casosprueba = "";
+		this.entorno = "";
+		this.entornoresult = "";
+		this.nombreresult = "";
+		this.jsonresult = "";
+
 		
 		
 		this.listadoresultado = [];
@@ -38,16 +45,21 @@ $(document).ready(function() {
 		this.todayDate = createTodayDate();
 		this.peticionFiltrado = [];
 		this.seleccionados = [];
+		this.CasoPrueba = [];
+		this.nombreCasoPrueba = [];
+		this.entornoArray = [];
+		this.entornoResultArray = [];
 		
-
-		this.resultobjetos = new resultObj();
-		this.resultobjetos.construct("ejecucion1","{'text' : 'Resultados Test Case TC1','children' : [{'text' : 'personas[1]','children' : [{'text' : 'persona[1]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor encontrado: Manolo'},{'text' : 'Valor esperado: Pepe'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 25'},{'text' : 'Valor encontrado: 21'}]}]},{'text' : 'persona[2]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor esperado: Eva'},{'text' : 'Valor encontrado: pepin'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 29'},{'text' : 'Valor encontrado: 123'}]}]}]}]}");
-		this.listadoresultado.push(this.resultobjetos);
 		
-		this.resultobjetos2 = new resultObj();
-		this.resultobjetos2.construct("ejecucion2","hago lo que quiero");
-		this.listadoresultado.push(this.resultobjetos2);
-		
+//
+//		this.resultobjetos = new resultObj();
+//		this.resultobjetos.construct("ejecucion1","{'id':'1234'}")
+//		this.listadoresultado.push(this.resultobjetos);
+//		
+//		this.resultobjetos2 = new resultObj();
+//		this.resultobjetos2.construct("ejecucion2","{'text' : 'Resultados Test Case TC1','children' : [{'text' : 'personas[1]','children' : [{'text' : 'persona[1]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor encontrado: Manolo'},{'text' : 'Valor esperado: Pepe'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 25'},{'text' : 'Valor encontrado: 21'}]}]},{'text' : 'persona[2]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor esperado: Eva'},{'text' : 'Valor encontrado: pepin'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 29'},{'text' : 'Valor encontrado: 123'}]}]}]}]}");
+//		this.listadoresultado.push(this.resultobjetos2);
+//		
 		
 
 		
@@ -55,17 +67,19 @@ $(document).ready(function() {
 
 		/** ****************************************FUNCIONES************************************** */
 
+		
+		
+		
 		this.logOut = function() {
 			window.open("index.html", target = "_self");
 
 		}
 		
 		this.visualizaJson = function(){
-			for(var i =0; i<this.listadoresultado.length; i++){
-				alert(this.listadoresultado[i].nombre+" " + this.selectresult);
+			for(var i = 0; i<this.listadoresultado.length; i++){
 				if(this.listadoresultado[i].nombre == this.selectresult){
 					
-					verJson(JSON.stringify(this.listadoresultado[i].json));
+					verJson(this.listadoresultado[i].json);
 				}
 			}
 			
@@ -139,12 +153,30 @@ $(document).ready(function() {
 			}
 
 		};
+		
+		this.reset = function(){
+			
+			this.origen = "";
+			this.destino = "";
+			this.instrumento = "";
+			this.idPeticion = "";
+			this.fechaDesde = "";
+			this.fechaHasta = "";
+			this.entorno = "";
+			
+		}
+		
+		
 
 
 
 		
-		/*****************************************LLamadas AJAX******************************************************/
+			/**
+			 * ***************************************LLamadas AJAX*****************************************************
+			 */
 
+		// inicializa los combobox del filtrado
+		
 		this.initCombo = function() {
 			
 			var outPutdata = [];
@@ -169,6 +201,14 @@ $(document).ready(function() {
 					this.instrumentoArray = outPutdata.instrumentos;
 					this.origenArray = outPutdata.origenes;
 					this.destinoArray = outPutdata.destinos;
+					this.entornoArray = outPutdata.nombre;
+					
+					for (var i = 0; i < this.entornoArray.length; i++) {
+						if (this.entornoArray[i] != "PRO") {
+							this.entornoResultArray.push(this.entornoArray[i]);
+						}
+					}
+
 
 				}
 				;
@@ -194,7 +234,8 @@ $(document).ready(function() {
 						+ "', 'Origen':'" + this.origen + "','Destino':'"
 						+ this.destino + "'" + ",'fechaDesde':'"
 						+ this.fechaDesde + "','fechaHasta':'"
-						+ this.fechaHasta + "'}",
+						+ this.fechaHasta + "','entorno':'"
+						+ this.entorno + "'}",
 				dataType : "json",
 				success : function(response) {
 					outPutdata = response;
@@ -210,9 +251,10 @@ $(document).ready(function() {
 					this.peticionFiltrado = [];
 					for (var i = 0; i < outPutdata.length; i++) {
 						this.peticionObjetos = new peticionObj();
-						this.peticionObjetos.construct(outPutdata[i].request_ID, outPutdata[i].Instrumento,outPutdata[i].Accion
-								,outPutdata[i].Origen,outPutdata[i].Destino,outPutdata[i].Mensaje,outPutdata[i].MensMN
+						this.peticionObjetos.construct(outPutdata[i].request_ID,outPutdata[i].request_ID, outPutdata[i].Instrumento,outPutdata[i].Accion
+								,outPutdata[i].Origen,outPutdata[i].Destino,outPutdata[i].Mensaje,outPutdata[i].MensMN,outPutdata[i].mensDestino
 								,outPutdata[i].MensDestino);
+						
 						
 						this.peticionFiltrado.push(this.peticionObjetos);
 						
@@ -224,10 +266,220 @@ $(document).ready(function() {
 
 		};
 		
-	});
+		// guardar caso de prueba
+		this.guardarCaso = function() {
+			this.CasoPrueba = "";
+			var outPutdata = [];
+			
+			this.CasoPrueba = "{'nombreCaso':'"+this.nombreCaso+"','operaciones':[";
+			for(var i =0; i<this.seleccionados.length-1; i++){
+				this.CasoPrueba += "{'id':'"+this.seleccionados[i].id+"','idPeticion':'"+this.seleccionados[i].idPeticion+"','instrumento':'"+this.seleccionados[i].instrumento
+									+"','accion':'"+this.seleccionados[i].accion+"','origen':'"+this.seleccionados[i].origen+"','destino':'"+this.seleccionados[i].destino
+									+"','mensaje':'"+this.seleccionados[i].mensaje+"','mensajeNeutro':'"+this.seleccionados[i].mensajeNeutro+"','mensajeDestino':'"+this.seleccionados[i].mensajeDestino+"'},";
+				
+			}
+			
+			if(this.seleccionados.length>0){
+				this.CasoPrueba += "{'id':'"+this.seleccionados[this.seleccionados.length-1].id+"','idPeticion':'"+this.seleccionados[this.seleccionados.length-1].idPeticion+"','instrumento':'"+this.seleccionados[this.seleccionados.length-1].instrumento
+				+"','accion':'"+this.seleccionados[this.seleccionados.length-1].accion+"','origen':'"+this.seleccionados[this.seleccionados.length-1].origen+"','destino':'"+this.seleccionados[this.seleccionados.length-1].destino
+				+"','mensaje':'"+this.seleccionados[this.seleccionados.length-1].mensaje+"','mensajeNeutro':'"+this.seleccionados[this.seleccionados.length-1].mensajeNeutro+"','mensajeDestino':'"+this.seleccionados[this.seleccionados.length-1].mensajeDestino+"'}]}";
+			}
+			$.ajax({
+				url : this.urlBase+"api/configuration/add",
+				type : 'POST',
+				async : false,
+				data : this.CasoPrueba,
+				dataType : "json",
+				success : function(response) {
+					outPutdata = response;
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					// alert(xhr.status + "\n" + thrownError);
+				}
+			});
+
+			if (outPutdata != null) {
+				{
+												
+				
+				this.initCasosprueba();
+				alert("caso de prueba guardado")
+						
+					}
+				}
+			
+			else{
+				alert("no ha sido posible guardar el caso de prueba")
+				
+			}
+
+		};
+	
+		// Eliminar caso de prueba
+		this.eliminarCaso = function() {
+			
+			this.nombreCasoPrueba = "";
+			var outPutdata = [];
+			this.nombreCasoPrueba =  "{'NombreCaso':' " + this.casosprueba+ "'}";
+			// alert(JSON.stringify(this.nombreCasoPrueba));
+			
+			$.ajax({
+				url : this.urlBase+"api/ejecution",
+				type : 'DELETE',
+				async : false,
+				data : this.nombreCasoPrueba,
+				dataType : "json",
+				success : function(response) {
+					outPutdata = response;
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					// alert(xhr.status + "\n" + thrownError);
+				}
+			});
+
+			if (outPutdata != null) {
+				
+					
+					this.initCasosprueba();
+					
+					alert("caso de prueba eliminado")
+			
+			}
+			
+			else{
+				alert("error no ha sido posible eliminar")
+			}
+
+		};
+		
+		//Falta parte servidor
+		
+//		// Eliminar resultado
+//		this.eliminarResultado = function() {
+//			
+//			this.nombreCasoPrueba = "";
+//			var outPutdata = [];
+//			this.nombreCasoPrueba =  "{'Nombre':' " + this.nombreresult+ "'}";
+//			// alert(JSON.stringify(this.nombreCasoPrueba));
+//			
+//			$.ajax({
+//				url : this.urlBase+"api/result",
+//				type : 'DELETE',
+//				async : false,
+//				data : JSON.stringify(this.nombreCasoPrueba),
+//				dataType : "json",
+//				success : function(response) {
+//					outPutdata = response;
+//				},
+//				error : function(xhr, ajaxOptions, thrownError) {
+//					// alert(xhr.status + "\n" + thrownError);
+//				}
+//			});
+//
+//			if (outPutdata != null) {
+//				
+//					
+//					this.initCasosprueba();
+//					
+//					alert("caso de prueba eliminado")
+//			
+//			}
+//			
+//			else{
+//				alert("error no ha sido posible eliminar")
+//			}
+//
+//		};
+		
+		
+		// Inicializar combo de listado Resultado
+		
+		this.initCasosprueba = function() {
+			
+			var outPutdata = [];
+			 this.urlBase = rutaAbsoluta();
+			 
+			$.ajax({
+				url : this.urlBase+"api/result",
+				type : 'GET',
+				async : false,
+				data : "",
+				dataType : "json",
+				success : function(response) {
+					outPutdata = response;
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					alert(xhr.status + "\n" + thrownError);
+				}
+			});
+
+			if (outPutdata != null) {
+				{
+					this.listadoresultado = outPutdata.resultados;
+				}
+				;
+			} else {
+				alert("Error en la llamada");
+			}
+		};
 		
 
-/***************************************************DIRECTIVAS**********************************************************/
+		//Inicializar combo de casos de prueba
+		this.initCasosprueba = function() {
+			
+			var outPutdata = [];
+			 this.urlBase = rutaAbsoluta();
+			 
+			$.ajax({
+				url : this.urlBase+"api/ejecution",
+				type : 'GET',
+				async : false,
+				data : "",
+				dataType : "json",
+				success : function(response) {
+					outPutdata = response;
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					alert(xhr.status + "\n" + thrownError);
+				}
+			});
+
+			if (outPutdata != null) {
+				{
+					this.listadocasosprueba = outPutdata.casosdeprueba;
+				}
+				;
+			} else {
+				alert("Error en la llamada");
+			}
+		};
+		
+
+	//// guarda resultados de casos de prueba
+		this.guardaresultado = function() {
+		
+			var outPutdata = [];
+			var datos = "";
+			var json1 ='{"Report": {"Grupo": [{"NTMMessageGeneric": {"NTMMessage": {"NTMHeader": {"MessageID": {"found": 10000000002593974,"expected": 100000000025939766}}}}},{"NTMMessageGeneric": {"NTMMessage": {"NTMTrade": {"TradeHeader": {"SysTradeID": {"SystemID": {"found": "Murex","expected": "Adaptiv"}}}}}}},{"NTMMessageGeneric": {"NTMMessage": {"NTMTrade": {"IRSwap": {"PaySide": {"TradeLeg": {"TradeLegDetails": {"TradeLegPrincipal": {"Principal": {"found": 400000000,"expected": 40000}}}}}}}}}}]}}'; 
+			datos += "{'NombreRes':'"+this.nombreresult+"','Json':'"+json1+"'}";
+
+			$.ajax({
+				url : this.urlBase+"api/result",
+				type : 'POST',
+				async : false,
+				data : datos,
+				dataType : "json",
+				success : function(response) {
+					outPutdata = response;
+				},
+			error : function(xhr, ajaxOptions, thrownError) {
+			}
+			});
+		}
+	
+	});
+	
+/** *************************************************DIRECTIVAS********************************************************* */
 
 	regresionTest.directive("configuration", function() {
 
@@ -395,37 +647,25 @@ function rutaAbsoluta(){
 
 function verJson(json){
 	
-	tree1 = new tree_component();
-    tree1.init($("#jsonviews"), { 
-      data  : {
-        type  : "json",
-        url   : "json.txt"
-      }
-    });
-	//	$('#jsonviews').jstree(
-//				{ 'core' : {
-//			'data' : [json]}}
-//	);
-//	
-//	$('#jsonviews').jstree(
-//			
-//			
-//			{ 'core' : {
-//			    'data' : [
-//				
-//				// ############ [START] JSON DE DIFERENCIAS ############
-//				
-//		{'text' : 'Resultados Test Case TC1','children' : [{'text' : 'personas[1]','children' : [{'text' : 'persona[1]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor encontrado: Manolo'},{'text' : 'Valor esperado: Pepe'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 25'},{'text' : 'Valor encontrado: 21'}]}]},{'text' : 'persona[2]','children' : [{'text' : 'nombre[1]','children' : [{'text' : 'Valor esperado: Eva'},{'text' : 'Valor encontrado: pepin'}]},{'text' : 'edad[1]','children' : [{'text' : 'Valor esperado: 29'},{'text' : 'Valor encontrado: 123'}]}]}]}]}
-//
-//				  
-//				// ############ [FINISH] JSON DE DIFERENCIAS ############
-//			    ]
-//			} }
-//			
-//			
-//			);	
+	
 
-		
 
+	vaciaDiv();
+	var divContent = "";
+	divContent +="<div id='jsonviews'>";
+	divContent += "<script>";
+	divContent +="$('#jsonviews').jstree(";
+	divContent += "{ 'core' : { 'data' : [";
+	divContent += json;
+	divContent += "]} }";
+	divContent += ");</script></div>";
+	$('#json').html(divContent);
+	
 }
  
+function vaciaDiv(){
+	var valor = $('#json').html();
+	if( valor != null || valor != ""){
+		$('#json').empty();
+	}
+}

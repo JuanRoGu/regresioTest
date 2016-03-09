@@ -50,8 +50,9 @@ function peticionObj()
         this.seleccionado = false;
     };
 
-    this.construct = function (idPeticion, instrumento,accion,origen,destino,mensaje,mensajeNeutro,mensajeDestino)
+    this.construct = function (id,idPeticion, instrumento,accion,origen,destino,mensaje,mensajeNeutro,mensajeDestino)
     {
+    	this.setId(id);
     	this.setIdPeticion(idPeticion);
         this.setInstrumento(instrumento);
         this.setOrigen(origen);
@@ -66,6 +67,7 @@ function peticionObj()
     // getters && Setters
     
     
+    this.setId = function (id){this.id = id;};
     this.setIdPeticion = function (idPeticion){this.idPeticion = idPeticion;};
     this.setInstrumento = function (instrumento){this.instrumento = instrumento;};
     this.setAccion = function (accion){this.accion = accion;};
@@ -81,6 +83,7 @@ function peticionObj()
     this.setSeleccionado = function (seleccionado){this.seleccionado = seleccionado;};
     
     
+    this.getId = function () {return this.id;};
     this.getIdPeticion = function () {return this.idPeticion;};
     this.getInstrumento = function () {return this.instrumento;};
     this.getAccion = function () {return this.accion;};
@@ -102,8 +105,8 @@ function peticionObj()
     	
     	var peticionString = "";
 
-        peticionString += "IdPeticion: " + this.getIdPeticion() + " Instrumento: " + this.getInstrumento + " Accion: " + this.getAccion() + " Origen: " + this.getOrigen() +  " Destino: " + this.getDestino() +
-        " Mensaje: " + this.getMensaje() + "FechaDesde" + this.getFechaDesde() + " FechaHasta: " +this.getFechaHasta()+ "mensaje: "+this.getMensaje()+"mensajeNeutro: "+this.getMensajeNeutro()+"\n";
+        peticionString += "Id: " + this.getId() + " IdPeticion: " + this.getIdPeticion() + " Instrumento: " + this.getInstrumento() + " Accion: " + this.getAccion() + " Origen: " + this.getOrigen() +  " Destino: " + this.getDestino() +
+        " FechaDesde" + this.getFechaDesde() + " FechaHasta: " +this.getFechaHasta()+ " mensaje: "+this.getMensaje()+" mensajeNeutro: "+this.getMensajeNeutro()+ " mensajeDestino: "+this.getMensajeDestino()+"\n";
         
         
         return peticionString;

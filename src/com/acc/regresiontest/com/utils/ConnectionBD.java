@@ -8,33 +8,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-
+import com.acc.regresiontest.com.properties.SavePropertiesOracle;
 public final class ConnectionBD {
 	
-	private static final String DRIVER_NAME = "oracle.jdbc.OracleDriver" ;
-	private static final String URL = "jdbc:oracle:thin:@//localhost:1521" ;
-	private static final String USER = "system" ;
-	private static final String PASSWORD = "admin123" ;
+	private static SavePropertiesOracle p = new SavePropertiesOracle();
 	
 	private static ConnectionBD connectionBD;
 	
 	private static Connection connection;
 	
 	private ConnectionBD(){
-	
+		p = p.obtener();
 	
 			try {
-				Class.forName(ConnectionBD.DRIVER_NAME);
-				connection = DriverManager.getConnection(ConnectionBD.URL, USER, PASSWORD);
+				Class.forName(ConnectionBD.p.getDRIVER_NAMEO());
+				connection = DriverManager.getConnection(ConnectionBD.p.getURLOracleO(), p.getUSERO(), p.getPASSWORDO());
 				connection.setAutoCommit(false);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
-			
-		
 	}
 	
 	

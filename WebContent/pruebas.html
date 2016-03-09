@@ -1,0 +1,110 @@
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>PoC JSON Diferencias</title>
+
+
+	<link rel="stylesheet" type="text/css" href="css/redmond/jquery-ui-1.10.4.custom.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="css/redmond/dialogos.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="frameWorks/jtree/js/jstree/themes/default/style.min.css" />
+
+
+	<script type="text/javascript" language="javascript" src="frameWorks/jtree/js/jquery-2.0.3.js"></script>
+	<!-- jTree -->
+		<script type="text/javascript" language="javascript" src="frameWorks/jtree/js/jstree/jstree.min.js"></script>
+<!-- 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type = "text/javascript"></script> -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type = "text/javascript"></script>
+    	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel = "Stylesheet" type="text/css" />
+    	    	
+<script>
+	// Invocacion jQuery cuando el Document esta cargado (antes de llevar acciones jQuery)
+	$(document)
+			.ready(
+					function() {
+
+						$('#jstree_demo_div')
+								.jstree(
+
+										{
+											'core' : {
+												'data' : [
+
+												// ############ [START] JSON DE DIFERENCIAS ############
+
+												{
+													'text' : 'Resultados Test Case TC1',
+													'children' : [ {
+														'text' : 'personas[1]',
+														'children' : [
+																{
+																	'text' : 'persona[1]',
+																	'children' : [
+																			{
+																				'text' : 'nombre[1]',
+																				'children' : [
+																						{
+																							'text' : 'Valor encontrado: Manolo'
+																						},
+																						{
+																							'text' : 'Valor esperado: Pepe'
+																						} ]
+																			},
+																			{
+																				'text' : 'edad[1]',
+																				'children' : [
+																						{
+																							'text' : 'Valor esperado: 25'
+																						},
+																						{
+																							'text' : 'Valor encontrado: 21'
+																						} ]
+																			} ]
+																},
+																{
+																	'text' : 'persona[2]',
+																	'children' : [
+																			{
+																				'text' : 'nombre[1]',
+																				'children' : [
+																						{
+																							'text' : 'Valor esperado: Eva'
+																						},
+																						{
+																							'text' : 'Valor encontrado: pepin'
+																						} ]
+																			},
+																			{
+																				'text' : 'edad[1]',
+																				'children' : [
+																						{
+																							'text' : 'Valor esperado: 29'
+																						},
+																						{
+																							'text' : 'Valor encontrado: 123'
+																						} ]
+																			} ]
+																} ]
+													} ]
+												}
+
+												// ############ [FINISH] JSON DE DIFERENCIAS ############
+												]
+											}
+										}
+
+								);
+
+						console
+								.log('El documento se ha cargado correctamente. jQuery preparado.');
+					});
+</script>
+
+</head>
+
+<body>
+	<p>ESTO ES UNA PRUEBA!!!!!!!!!!!!!!!!!!!!!!!!<p>
+	<div id="jstree_demo_div" />
+
+</body>
+</html>
